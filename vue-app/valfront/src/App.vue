@@ -1,65 +1,103 @@
-<template>
-  <sidenav
-    v-if="$store.state.showSidenav"
-    :custom_class="$store.state.mcolor"
-    :class="[
-      $store.state.isTransparent,
-      $store.state.isRTL ? 'fixed-end' : 'fixed-start',
-    ]"
-  />
-  <main
-    class="main-content position-relative max-height-vh-100 h-100 border-radius-lg"
-    :style="$store.state.isRTL ? 'overflow-x: hidden' : ''"
-  >
-    <!-- nav -->
-    <navbar
-      v-if="$store.state.showNavbar"
-      :class="[navClasses]"
-      :text-white="$store.state.isAbsolute ? 'text-white opacity-8' : ''"
-      :min-nav="navbarMinimize"
-    />
-    <router-view />
-    <app-footer v-show="$store.state.showFooter" />
-    <configurator
-      :toggle="toggleConfigurator"
-      :class="[
-        $store.state.showConfig ? 'show' : '',
-        $store.state.hideConfigButton ? 'd-none' : '',
-      ]"
-    />
-  </main>
-</template>
-<script>
-import Sidenav from "./examples/Sidenav/index.vue";
-import Configurator from "@/examples/Configurator.vue";
-import Navbar from "@/examples/Navbars/Navbar.vue";
-import AppFooter from "@/examples/Footer.vue";
-import { mapMutations } from "vuex";
-export default {
-  name: "App",
-  components: {
-    Sidenav,
-    Configurator,
-    Navbar,
-    AppFooter,
-  },
+<script setup>
+// This starter template is using Vue 3 <script setup> SFCs
+// Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
+import Navigation from './components/Nav.vue'
+import Login from './components/Login.vue'
 
-  computed: {
-    navClasses() {
-      return {
-        "position-sticky blur shadow-blur mt-4 left-auto top-1 z-index-sticky":
-          this.$store.state.isNavFixed,
-        "position-absolute px-4 mx-0 w-100 z-index-2":
-          this.$store.state.isAbsolute,
-        "px-0 mx-4 mt-4": !this.$store.state.isAbsolute,
-      };
-    },
-  },
-  beforeMount() {
-    this.$store.state.isTransparent = "bg-transparent";
-  },
-  methods: {
-    ...mapMutations(["toggleConfigurator", "navbarMinimize"]),
-  },
-};
+
+
+
 </script>
+
+<template>
+  <div id="app">
+  
+  <Navigation />
+  <div class="auth-wrapper">
+    <div class="auth-inner">
+      <Login/>
+    </div>
+  </div>
+  </div>
+</template>
+
+<style>
+    @import url('https://fonts.googleapis.com/css?family=Fira+Sans:400,500,600,700,800');
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body{
+      background: #1C8EF9 !important;
+      min-height: 100vh;
+      display: flex;
+      font-weight: 400;
+      font-family: 'Fira Sans', sans-serif;
+    }
+
+    h1, h2, h3, h4, h5, h6, label, span {
+      font-weight: 500;
+      font-family: 'Fira Sans', sans-serif;
+    }
+
+    body, html, #app, #root, .auth-wrapper {
+      width: 100%;
+      height: 100%;
+    }
+
+    #app{
+      text-align: center;
+    }
+
+    .navbar-light {
+      background-color: #ffffffff;
+      box-shadow: 0px 14px 80px rgba(34, 35, 58, 0.2);
+    }
+
+    .auth-wrapper {
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      text-align: left;
+    }
+
+    .auth-inner {
+      width: 450px;
+      margin: auto;
+      background: #ffffffff;
+      box-shadow: 0px 14px 80px rgba(34, 35, 58, 0.2);
+      padding: 30px 55px 45px 55px;
+      border-radius: 15px;
+      transition: all .3s;
+    }
+
+    .auth-wrapper .form-control:focus {
+      border-color: #167bff;
+      box-shadow: none;
+    }
+
+    .auth-wrapper h3 {
+      text-align: center;
+      margin: 0;
+      line-height: 1;
+      padding-bottom: 20px;
+    }
+
+    .custom-control-label {
+      font-weight: 400;
+    }
+
+    .forgot-password,
+    .forgot-password a {
+      text-align: right;
+      font-size: 13px;
+      padding-top: 10px;
+      color: #7f7d7d;
+      margin: 0;
+    }
+
+    .forgot-password a {
+      color: #167bff;
+    }
+</style>
