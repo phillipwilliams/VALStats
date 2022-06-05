@@ -1,19 +1,19 @@
-import { createApp } from 'vue';
-import { createRouter, createWebHistory } from 'vue-router';
-import App from './App.vue';
-import Home from './components/Home.vue';
-import Login from './components/Login.vue';
+import { createApp } from 'vue'
+import App from './App.vue'
+import router from "./router";
+import { initializeApp } from "firebase/app";
 
-const router = createRouter({
-    history: createWebHistory(),
-    routes: [
-        {path: "/", name: 'home', component: Home},
-        {path: "/login", name: 'login', component: Login}
 
-        
-    ]
-});
+const firebaseConfig = {
+    apiKey: "AIzaSyCBuA1ZQbdDAxGbvYRe4isGeV1o5Jlo4eM",
+    authDomain: "valdb-3b36d.firebaseapp.com",
+    projectId: "valdb-3b36d",
+    storageBucket: "valdb-3b36d.appspot.com",
+    messagingSenderId: "59622579519",
+    appId: "1:59622579519:web:8f4d1e89fb6d2251bd478a",
+    measurementId: "G-PGS46EXKVS"
+  };
 
-const app = createApp(App);
-app.use(router);
-app.mount('#app');
+initializeApp(firebaseConfig);
+
+createApp(App).use(router).mount('#app')
