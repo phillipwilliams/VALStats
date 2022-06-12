@@ -35,7 +35,11 @@ describe('Signin page', () =>{
         expect(wrapper.find('h1').exists()).toBeTruthy()
         expect(wrapper.find('input[type="text"]').exists()).toBeTruthy()
         expect(wrapper.find('input[type="password"]').exists()).toBeTruthy()
-        expect(wrapper.find('button').exists()).toBeTruthy()
+        
+    })
+
+    it('should not be able to access feed if not logged in', async () =>{
+        
     })
 
     it('should login', async () =>{
@@ -45,7 +49,5 @@ describe('Signin page', () =>{
         mockSignIn(mockGetAuth, email, password)
         expect(mockSignIn).toBeCalledWith(mockGetAuth, email, password)
 
-        
-        
     })
 });

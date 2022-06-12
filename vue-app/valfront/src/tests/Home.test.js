@@ -12,6 +12,6 @@
  describe('Home page', () =>{
      it('should render', () =>{
          const wrapper = mount(Home)
-         expect(wrapper.find('h1').exists()).toBeFalsy()
+         expect(wrapper.find('h1').exists()).toBeTruthy()
      })
  });

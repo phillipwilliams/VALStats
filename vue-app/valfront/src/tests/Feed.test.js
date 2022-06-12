@@ -12,6 +12,6 @@
  describe('Feed page', () =>{
      it('should render', () =>{
          const wrapper = mount(Feed)
-         expect(wrapper.find('h1').exists()).toBeFalsy()
+         expect(wrapper.find('h1').exists()).toBeTruthy()
      })
  });

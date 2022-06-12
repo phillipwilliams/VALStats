@@ -29,27 +29,29 @@ vi.mock('firebase/auth', () => {
  
  
  
- describe('Register page', () =>{
-     it('should render', () =>{
-         const wrapper = mount(Register)
-        expect(wrapper.find('h1').exists()).toBeTruthy()
-        expect(wrapper.find('input[type="text"]').exists()).toBeTruthy()
-        expect(wrapper.find('input[type="password"]').exists()).toBeTruthy()
-        expect(wrapper.find('button').exists()).toBeTruthy()
-     })
+describe('Register page', () =>{
+    it('should render', () =>{
+        const wrapper = mount(Register)
+    expect(wrapper.find('h1').exists()).toBeTruthy()
+    expect(wrapper.find('input[type="text"]').exists()).toBeTruthy()
+    expect(wrapper.find('input[type="password"]').exists()).toBeTruthy()
+    expect(wrapper.find('button').exists()).toBeTruthy()
+    })
 
-     it('should register', () =>{
-        const email = 'abc@gmail.com'
-        const password = '123456'
-        mockSignUp(mockGetAuth, email, password)
-        expect(mockSignUp).toBeCalledWith(mockGetAuth, email, password)
-     })
+    it('should register', () =>{
+    const email = 'abc@gmail.com'
+    const password = '123456'
+    mockSignUp(mockGetAuth, email, password)
+    expect(mockSignUp).toBeCalledWith(mockGetAuth, email, password)
+    })
 
-     it('should be logged in', ()=>{
-        const email = 'abc'
-        const password = '123456'
-        mockSignUp(mockGetAuth, email, password)
-        expect(mockSignUp).toBeCalledWith(mockGetAuth, email, password)
+    it('should be logged in', ()=>{
+    const email = 'abc'
+    const password = '123456'
+    mockSignUp(mockGetAuth, email, password)
+ 
+
+    
         
      })
  });
