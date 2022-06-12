@@ -1,4 +1,4 @@
-import { expect, test} from "vitest"
+import { describe, expect, test} from "vitest"
 
 const user = {
     name: "Tyler",
@@ -8,4 +8,8 @@ const user = {
 test("Tyler is 24", () =>{
     expect(user.name).toBe("Tyler");
     expect(user.age).toBe(24);
+});
+
+test("User Signs in Successfully", () =>{
+
 });
