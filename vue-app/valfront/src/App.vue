@@ -32,11 +32,7 @@ const handleSignOut = () => {
   <div>
     <nav>
       <router-link to="/"> Home </router-link> |
-<<<<<<< Updated upstream
       <router-link to="/feed"> Feed </router-link> |
-=======
-      <router-link to="/feed"> Profile </router-link> |
->>>>>>> Stashed changes
       <router-link to="/register"> Register </router-link> |
       <router-link to="/sign-in"> Login </router-link> |
       <button @click="handleSignOut" v-if="isLoggedIn">Sign out</button>

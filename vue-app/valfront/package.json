@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "test": "vitest",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -13,7 +14,9 @@
     "vue-router": "^4.0.15"
   },
   "devDependencies": {
+    "@testing-library/vue": "^6.6.0",
     "@vitejs/plugin-vue": "^2.3.3",
-    "vite": "^2.9.9"
+    "vite": "^2.9.9",
+    "vitest": "^0.14.1"
   }
 }
