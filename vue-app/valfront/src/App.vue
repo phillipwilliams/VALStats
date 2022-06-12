@@ -1,6 +1,4 @@
 <script setup>
-// This starter template is using Vue 3 <script setup> SFCs
-// Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
 import { onMounted, ref } from 'vue';
 import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
 import router from './router';
@@ -18,7 +16,6 @@ onMounted(() =>{
     }
   });
 });
-
 const handleSignOut = () => {
   signOut(auth).then(() =>{
     router.push("/");
@@ -30,11 +27,12 @@ const handleSignOut = () => {
 <template>
   <div>
     <nav>
-      <router-link to="/"> Home </router-link> |
+      <header><router-link to="/" style="font-family:Valfont; text-decoration: none; font-size: 50px; color: white; text-align: right;" ><span style="color: #dc3d4b">V</span>ALSTATS</router-link>
       <router-link to="/feed"> Feed </router-link> |
-      <router-link to="/register"> Register </router-link> |
       <router-link to="/sign-in"> Login </router-link> |
-      <button @click="handleSignOut" v-if="isLoggedIn">Sign out</button>
+      <router-link to="/register"> Register </router-link> |
+      <button @click="handleSignOut" v-if="isLoggedIn" name="signout">Sign out</button>
+      </header>
     </nav>
     <router-view />
   </div>
@@ -47,11 +45,28 @@ const handleSignOut = () => {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
+
+header{
+    height: 50px;
+    background: black;
+    margin-top: -8px;
+    margin-left: -8px;
+    margin-right: -8px;
+    text-align: left;
+    color: white;
+    }
+
 @font-face {
   font-family: "Valfont";
   src: local("Valfont"),
    url(./fonts/valfont.ttf) format("truetype");
+}
+a:visited { 
+ text-decoration: none; 
+ color: rgb(255, 255, 255); 
+}
+h1{
+    margin-top: 0;
 }
 </style>
