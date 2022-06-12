@@ -1,65 +1,72 @@
-<template>
-  <sidenav
-    v-if="$store.state.showSidenav"
-    :custom_class="$store.state.mcolor"
-    :class="[
-      $store.state.isTransparent,
-      $store.state.isRTL ? 'fixed-end' : 'fixed-start',
-    ]"
-  />
-  <main
-    class="main-content position-relative max-height-vh-100 h-100 border-radius-lg"
-    :style="$store.state.isRTL ? 'overflow-x: hidden' : ''"
-  >
-    <!-- nav -->
-    <navbar
-      v-if="$store.state.showNavbar"
-      :class="[navClasses]"
-      :text-white="$store.state.isAbsolute ? 'text-white opacity-8' : ''"
-      :min-nav="navbarMinimize"
-    />
-    <router-view />
-    <app-footer v-show="$store.state.showFooter" />
-    <configurator
-      :toggle="toggleConfigurator"
-      :class="[
-        $store.state.showConfig ? 'show' : '',
-        $store.state.hideConfigButton ? 'd-none' : '',
-      ]"
-    />
-  </main>
-</template>
-<script>
-import Sidenav from "./examples/Sidenav/index.vue";
-import Configurator from "@/examples/Configurator.vue";
-import Navbar from "@/examples/Navbars/Navbar.vue";
-import AppFooter from "@/examples/Footer.vue";
-import { mapMutations } from "vuex";
-export default {
-  name: "App",
-  components: {
-    Sidenav,
-    Configurator,
-    Navbar,
-    AppFooter,
-  },
+<script setup>
+import { onMounted, ref } from 'vue';
+import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
+import router from './router';
 
-  computed: {
-    navClasses() {
-      return {
-        "position-sticky blur shadow-blur mt-4 left-auto top-1 z-index-sticky":
-          this.$store.state.isNavFixed,
-        "position-absolute px-4 mx-0 w-100 z-index-2":
-          this.$store.state.isAbsolute,
-        "px-0 mx-4 mt-4": !this.$store.state.isAbsolute,
-      };
-    },
-  },
-  beforeMount() {
-    this.$store.state.isTransparent = "bg-transparent";
-  },
-  methods: {
-    ...mapMutations(["toggleConfigurator", "navbarMinimize"]),
-  },
-};
+const isLoggedIn = ref(false);
+let auth;
+onMounted(() =>{
+  auth = getAuth();
+  onAuthStateChanged(auth, (user) =>{
+    if (user){
+      isLoggedIn.value = true;
+    }
+    else{
+      isLoggedIn.value = false;
+    }
+  });
+});
+const handleSignOut = () => {
+  signOut(auth).then(() =>{
+    router.push("/");
+  })
+}
+
 </script>
+
+<template>
+  <div>
+    <nav>
+      <header><router-link to="/" style="font-family:Valfont; text-decoration: none; font-size: 50px; color: white; text-align: right;" ><span style="color: #dc3d4b">V</span>ALSTATS</router-link>
+      <router-link to="/feed"> Feed </router-link> |
+      <router-link to="/sign-in"> Login </router-link> |
+      <router-link to="/register"> Register </router-link> |
+      <button @click="handleSignOut" v-if="isLoggedIn" name="signout">Sign out</button>
+      </header>
+    </nav>
+    <router-view />
+  </div>
+</template>
+
+<style>
+#app {
+  font-family: Avenir, Helvetica, Arial, sans-serif, "Valfont";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+}
+
+header{
+    height: 50px;
+    background: black;
+    margin-top: -8px;
+    margin-left: -8px;
+    margin-right: -8px;
+    text-align: left;
+    color: white;
+    }
+
+@font-face {
+  font-family: "Valfont";
+  src: local("Valfont"),
+   url(./fonts/valfont.ttf) format("truetype");
+}
+a:visited { 
+ text-decoration: none; 
+ color: rgb(255, 255, 255); 
+}
+h1{
+    margin-top: 0;
+}
+</style>
