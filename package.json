@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@vitejs/plugin-vue": "^2.3.3",
     "firebase": "^9.8.2",
     "vue-navigation-bar": "^5.0.2",
     "vue-router": "^4.0.15"
@@ -11,7 +12,7 @@
     "test": "vitest"
   },
   "devDependencies": {
-    "@vue/test-utils": "^2.0.0",
+    "@vue/test-utils": "^2.0.0-rc.18",
     "vitest": "^0.14.1"
   }
 }

@@ -3,7 +3,6 @@
 // Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
 import { onMounted, ref } from 'vue';
 import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
-import { routeLocationKey } from 'vue-router';
 import router from './router';
 
 const isLoggedIn = ref(false);

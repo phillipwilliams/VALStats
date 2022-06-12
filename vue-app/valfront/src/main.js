@@ -2,8 +2,6 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from "./router";
 import { initializeApp } from "firebase/app";
-import VueNavigationBar from 'vue-navigation-bar';
-import 'vue-navigation-bar/dist/vue-navigation-bar.css';
 
 
 const firebaseConfig = {
@@ -17,8 +15,5 @@ const firebaseConfig = {
   };
 
 initializeApp(firebaseConfig);
-const app = createApp(App);
-app.use(router);
-app.component('vue-navigation-bar', VueNavigationBar);
 
-app.mount('#app');
+createApp(App).use(router).mount('#app')
