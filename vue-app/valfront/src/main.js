@@ -14,6 +14,9 @@ const firebaseConfig = {
     measurementId: "G-PGS46EXKVS"
   };
 
+
+  
+
 initializeApp(firebaseConfig);
 
 createApp(App).use(router).mount('#app')
