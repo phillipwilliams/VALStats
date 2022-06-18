@@ -27,8 +27,6 @@ vi.mock('firebase/auth', () => {
     }
 })
  
- 
- 
 describe('Register page', () =>{
     it('should render', () =>{
         const wrapper = mount(Register)
@@ -49,7 +47,7 @@ describe('Register page', () =>{
     const email = 'abc'
     const password = '123456'
     mockSignUp(mockGetAuth, email, password)
- 
+        
 
     
         
