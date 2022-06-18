@@ -1,7 +1,8 @@
-import { createApp } from 'vue'
-import App from './App.vue'
+import { createApp } from 'vue';
+import App from './App.vue';
 import router from "./router";
 import { initializeApp } from "firebase/app";
+import {getFirestore } from "firebase/firestore";
 
 
 const firebaseConfig = {
@@ -17,6 +18,10 @@ const firebaseConfig = {
 
   
 
-initializeApp(firebaseConfig);
+const fbdb = initializeApp(firebaseConfig);
+const db = getFirestore(fbdb)
 
+export{
+  db
+}
 createApp(App).use(router).mount('#app')
