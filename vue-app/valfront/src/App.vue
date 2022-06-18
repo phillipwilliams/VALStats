@@ -2,14 +2,18 @@
 import { onMounted, ref } from 'vue';
 import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
 import router from './router';
+import {queryacc, usrname} from "./firestore/storeuser"
 
 const isLoggedIn = ref(false);
 let auth;
+let inputname = "";
 onMounted(() =>{
   auth = getAuth();
   onAuthStateChanged(auth, (user) =>{
+    console.log(usrname)
     if (user){
       isLoggedIn.value = true;
+      //queryacc()
     }
     else{
       isLoggedIn.value = false;
