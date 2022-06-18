@@ -1,9 +1,9 @@
 <template>
   <h1>Create an Account</h1>
-  <p><input type="text" placeholder="Email" v-model="email" /></p>
+  <p><input type="email" placeholder="Email" v-model="email" /></p>
   <p><input type="password" placeholder="Password" v-model="password" /></p>
-  <p><input type="ValID" placeholder="Valorant ID" v-model="valorantid" /></p>
-  <p><input type="RegionID" placeholder="Region ID" v-model="regionid" /></p>
+  <p><input type="valorantid" placeholder="Valorant ID" v-model="valorantid" /></p>
+  <p><input type="regionid" placeholder="Region ID" v-model="regionid" /></p>
   <p v-if="errMsg">{{ errMsg}}</p>
   <p><button @click="register">Submit</button></p>
 </template>
