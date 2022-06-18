@@ -26,9 +26,6 @@ vi.mock('firebase/auth', () => {
     }
 })
 
-
-
-
 describe('Signin page', () =>{
     it('should render', () =>{
         const wrapper = mount(SignIn)
@@ -38,9 +35,7 @@ describe('Signin page', () =>{
         
     })
 
-    it('should not be able to access feed if not logged in', async () =>{
-        
-    })
+    
 
     it('should login', async () =>{
 

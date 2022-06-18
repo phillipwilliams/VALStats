@@ -27,14 +27,14 @@ vi.mock('firebase/auth', () => {
     }
 })
  
- 
- 
 describe('Register page', () =>{
     it('should render', () =>{
         const wrapper = mount(Register)
     expect(wrapper.find('h1').exists()).toBeTruthy()
-    expect(wrapper.find('input[type="text"]').exists()).toBeTruthy()
+    expect(wrapper.find('input[type="email"]').exists()).toBeTruthy()
     expect(wrapper.find('input[type="password"]').exists()).toBeTruthy()
+    expect(wrapper.find('input[type="valorantid"]').exists()).toBeTruthy()
+    expect(wrapper.find('input[type="regionid"]').exists()).toBeTruthy()
     expect(wrapper.find('button').exists()).toBeTruthy()
     })
 
@@ -49,10 +49,6 @@ describe('Register page', () =>{
     const email = 'abc'
     const password = '123456'
     mockSignUp(mockGetAuth, email, password)
- 
-
-    
-        
      })
  });
 
