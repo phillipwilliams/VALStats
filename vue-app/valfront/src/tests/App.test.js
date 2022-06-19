@@ -21,7 +21,7 @@ vi.mock('firebase/auth', () => {
 
  
 
-describe('Appvue', () =>{
+/*describe('Appvue', () =>{
     it('should render', () =>{
         const wrapper = mount(Appvue, {
             stubs: {
@@ -34,5 +34,5 @@ describe('Appvue', () =>{
         expect(wrapper.text()).toContain("Register").toBeTruthy()
         expect(wrapper.text()).toContain("Login").toBeTruthy()
     })
-});
+});*/
 
