@@ -19,9 +19,11 @@ vi.mock('firebase/auth', () => {
     }
 })
 
- 
+const onAuthStateChanged = vi.fn(() => {
+    return Promise.resolve('result of onAuthStateChanged');
+  });
 
-/*describe('Appvue', () =>{
+describe('Appvue', () =>{
     it('should render', () =>{
         const wrapper = mount(Appvue, {
             stubs: {
@@ -34,5 +36,5 @@ vi.mock('firebase/auth', () => {
         expect(wrapper.text()).toContain("Register").toBeTruthy()
         expect(wrapper.text()).toContain("Login").toBeTruthy()
     })
-});*/
+});
 
