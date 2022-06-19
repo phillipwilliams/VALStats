@@ -1,1 +1,0 @@
-import{_ as e}from"./plugin-vue_export-helper.21dcd24c.js";import{o as r,c}from"./index.023363ad.js";const o={};function t(n,a){return r(),c("h1",null,"User Feed")}var f=e(o,[["render",t]]);export{f as default};
