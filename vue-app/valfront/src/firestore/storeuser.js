@@ -1,14 +1,16 @@
-import { collection, addDoc } from "firebase/firestore"; 
+import { collection, addDoc, query, where, doc, setDoc, getDocs } from "firebase/firestore"; 
 import {db} from "../main"
 import {getAuth} from "firebase/auth";
 
 
+ var usrname = ""
 
-function addacc(valorantid, RegionID){
+async function addacc(valorantid, RegionID){
 try {
 
-    const docRef =  addDoc(collection(db, "users"), {
-      userid: getAuth().currentUser.uid,
+    
+    const docRef = await setDoc(doc(db, "users", getAuth().currentUser.email),{
+    userid: getAuth().currentUser.uid,
       ValID: valorantid,
       ValRegion: RegionID
     });
@@ -16,9 +18,25 @@ try {
   } catch (e) {
     console.error("Error adding document: ", e);
   }
-
 }
 
+async function queryacc(){
+  const userref = collection(db, "users");
+  const q = query(userref, where("userid", "==", getAuth().currentUser.uid))
+
+
+  const querySnapshot = await getDocs(q);
+  querySnapshot.forEach((doc) => {
+  // doc.data() is never undefined for query doc snapshots
+  console.log(doc.id, " => ", doc.data());
+  usrname = doc.data().ValID
+});
+}
+
+
+
   export{
-    addacc
+    addacc,
+    queryacc,
+    usrname
   }

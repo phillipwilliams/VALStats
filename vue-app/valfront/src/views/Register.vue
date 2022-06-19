@@ -20,7 +20,6 @@
   const valorantid = ref('');
   const regionid = ref('');
   const errMsg = ref();
-  var check = false;
 
  
   const register = async () => {
@@ -34,7 +33,7 @@
                 addacc(valorantid.value, regionid.value)
                 console.log("Successfully registered!");
                 router.push('/feed')
-          })
+              })
           .catch((error) =>{
               console.log(error.code);
               errMsg.value = error.message
@@ -46,7 +45,7 @@
       }
         }
         else {   
-          errMsg.value = "Valorant API error"
+          errMsg.value = "Invalid Input"
         }
         
       })
