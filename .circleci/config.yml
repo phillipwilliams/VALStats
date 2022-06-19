@@ -19,6 +19,7 @@ workflows:
           version: '16.10'
           # If you are using yarn, change the line below from "npm" to "yarn"
           pkg-manager: npm
-          app-dir: ~/vue-app/valfront
+          working_directory: ~/vue-app/valfront
+          
       
             
