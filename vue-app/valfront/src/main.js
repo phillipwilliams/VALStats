@@ -3,6 +3,8 @@ import App from './App.vue';
 import router from "./router";
 import { initializeApp } from "firebase/app";
 import {getFirestore } from "firebase/firestore";
+import vSelect from 'vue-select'
+import 'vue-select/dist/vue-select.css';
 
 
 const firebaseConfig = {
@@ -24,4 +26,6 @@ const db = getFirestore(fbdb)
 export{
   db
 }
-createApp(App).use(router).mount('#app')
+const myapp = createApp(App)
+myapp.component('v-select', vSelect)
+myapp.use(router).mount('#app')

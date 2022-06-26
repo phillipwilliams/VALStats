@@ -31,7 +31,7 @@ const handleSignOut = () => {
 <template>
   <div>
     <nav>
-      <header><div class="logo"><router-link to="/" style="font-family:Valfont; text-decoration: none; font-size: 40px; color: white; text-align: right;" ><span style="color: #dc3d4b">V</span>ALSTATS</router-link></div>
+      <header><div class="logo"><router-link to="/" style="font-family:Valfont; text-decoration: none; font-size: 40px; color: white; text-align: left;" ><span style="color: #dc3d4b">V</span>ALSTATS</router-link></div>
       <router-link id="links" to="/feed"> Profile</router-link> 
       <router-link id="links" to="/sign-in"> Login</router-link> 
       <router-link id="links" to="/register"> Register</router-link> 
@@ -45,32 +45,33 @@ const handleSignOut = () => {
 <style>
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif, "Valfont";
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
 }
-.logo router-link {
-  transform: translateX(-10px);
-  line-height: 20px;
+.logo  {
   margin: 0;
-  max-width: 4ch;
+  display: flex;
   color: white;
-  font-size: 25px;
-  align-self: center;
+  font-size: 10px;
 }
-header {
-  font-family: Valorant, sans-serif;
-  min-height: 50px;
+
+#links{
   display: flex;
   align-items:center;
+  padding: 0px 40px;
   justify-content: space-between;
+}
+header {
+  font-family: Valfont, sans-serif;
+  min-height: 45px;
+  display: flex;
   padding: 0px 50px;
   background-color: #0c0b0b;
   position: sticky;
   flex-flow: wrap;
   padding-bottom: 4px;
 }
+
 
 @font-face {
   font-family: "Valfont";
@@ -82,13 +83,16 @@ a:visited {
  color: rgb(255, 255, 255); 
 }
 h1{
-    font-family: Valorant, sans-serif;
+    font-family: Valfont, sans-serif;
     margin-top: 0;
 }
 
 html, body{
-  font-family: Valorant, sans-serif;
+  font-family: Valfont, sans-serif;
   scroll-behavior: smooth;
+  text-rendering: optimizelegibility;
+  -moz-osx-font-smoothing: grayscale;
+  -moz-text-size-adjust: none;
   margin: 0 !important;
   padding: 0 !important;
   
@@ -108,16 +112,5 @@ html, body{
   color: white;
 }
 
-input {
-  font-weight: bold;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  border: 2px solid #201e1f;
-  padding: 10px;
-  background-color: #201e1f;
-  border-radius: 5px;
-  outline: none;
-  color: white;
-  margin: 5px;
-  height: 18px;
-}
+
 </style>
