@@ -22,6 +22,7 @@ v-on:input="updateValue($event.target.value)"
     <b>KDA: </b>{{matches[0][2]}}/{{matches[0][3]}}/{{matches[0][4]}}
     <b>score: </b>{{matches[0][5]}}-{{matches[0][6]}}
     <b> {{matches[0][7]}}</b>
+    <button id="submit"> Select</button>
      </pre>
     </p>
 </template>
@@ -32,7 +33,6 @@ v-on:input="updateValue($event.target.value)"
   import { onMounted, ref } from 'vue';
   import { doc, getDoc } from "firebase/firestore"; 
   import {db} from "../main"
-  import { computed } from 'vue'
   
 
   let curruser = getAuth().currentUser.email;
