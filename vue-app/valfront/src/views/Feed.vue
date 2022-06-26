@@ -1,57 +1,18 @@
 <template>
 <h1>User Profile</h1>
 <p> Choose which match you would like to view</p>
+<div>
+<v-select 
+v-model.lazy="selected"
+v-on:input="updateValue($event.target.value)"
+:options="[
+    { label: 'Match 1', id: 0 },
+    { label: 'Match 2', id: 1 }, 
+    { label: 'Match 3', id: 2 },
+    { label: 'Match 4', id: 3 },
+    { label: 'Match 5', id: 4 }]" />
 
-<v-container fluid>
-    <v-row align="center">
-      <v-col
-        class="d-flex"
-        cols="12"
-        sm="6"
-      >
-        <v-select
-          :items="items"
-          label="Standard"
-        ></v-select>
-      </v-col>
-
-      <v-col
-        class="d-flex"
-        cols="12"
-        sm="6"
-      >
-        <v-select
-          :items="items"
-          filled
-          label="Filled style"
-        ></v-select>
-      </v-col>
-
-      <v-col
-        class="d-flex"
-        cols="12"
-        sm="6"
-      >
-        <v-select
-          :items="items"
-          label="Outlined style"
-          outlined
-        ></v-select>
-      </v-col>
-
-      <v-col
-        class="d-flex"
-        cols="12"
-        sm="6"
-      >
-        <v-select
-          :items="items"
-          label="Solo field"
-          solo
-        ></v-select>
-      </v-col>
-    </v-row>
-  </v-container>
+</div>
 </template>
 
 
@@ -60,6 +21,7 @@
   import { onMounted, ref } from 'vue';
   import { doc, getDoc } from "firebase/firestore"; 
   import {db} from "../main"
+  import { computed } from 'vue'
   
 
   let curruser = getAuth().currentUser.email;
@@ -71,6 +33,12 @@
   let elim;
   let death;
   let assist;
+
+
+
+
+  
+
 
 
 onMounted(async ()  =>{
@@ -112,8 +80,10 @@ onMounted(async ()  =>{
             }
             console.log(matches[0])
             updated.value = true;
+            console.log(updated.value)
         })
         })
 
 
 </script>
+
