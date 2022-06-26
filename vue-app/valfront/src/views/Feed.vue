@@ -2,7 +2,9 @@
 <h1>User Profile</h1>
 <p> Choose which match you would like to view</p>
 <div>
-<v-select 
+<center><v-select
+style="width:300px;"
+
 v-model.lazy="selected"
 v-on:input="updateValue($event.target.value)"
 :options="[
@@ -10,9 +12,18 @@ v-on:input="updateValue($event.target.value)"
     { label: 'Match 2', id: 1 }, 
     { label: 'Match 3', id: 2 },
     { label: 'Match 4', id: 3 },
-    { label: 'Match 5', id: 4 }]" />
+    { label: 'Match 5', id: 4 }]" /></center>
 
 </div>
+
+<p v-if="updated" ><pre>
+    <b>Map: </b>{{matches[0][0]}} 
+    <b>Date: </b>{{matches[0][1]}}
+    <b>KDA: </b>{{matches[0][2]}}/{{matches[0][3]}}/{{matches[0][4]}}
+    <b>score: </b>{{matches[0][5]}}-{{matches[0][6]}}
+    <b> {{matches[0][7]}}</b>
+     </pre>
+    </p>
 </template>
 
 
@@ -51,10 +62,8 @@ onMounted(async ()  =>{
     console.log(valname)
     console.log(valregion)
   }
-
-
-
   const reqmsg = "https://api.henrikdev.xyz/valorant/v3/matches/na/" + valname + "/" + valregion;
+
     fetch(reqmsg)
         .then(function(response)  {
            return response.json();
@@ -73,7 +82,7 @@ onMounted(async ()  =>{
                 if(obj.data[i].teams.red.rounds_won > obj.data[i].teams.blue.rounds_won) winner = "Red"
                 else winner = "Blue"
                 
-                winner = (winner == userteam) ? "won" : "lost" 
+                winner = (winner == userteam) ? "Won" : "Lost" 
                 
 
                 matches.push([obj.data[i].metadata.map, obj.data[i].metadata.game_start_patched, elim, death, assist, obj.data[i].teams.red.rounds_won, obj.data[i].teams.blue.rounds_won, winner])
