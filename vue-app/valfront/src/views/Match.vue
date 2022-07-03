@@ -32,7 +32,10 @@
             </div>
         </tab>
         <tab name="Round Breakdown">
-            Second tab content
+           <tabs v-if="updated" :options="{ useUrlFragment: false }">
+            <tab v-for="index in playerinfo[0].rounds" :id="index" :name="index">{{index}}</tab>
+            
+           </tabs>
         </tab>
     </tabs>
     
@@ -45,7 +48,9 @@ import {matchdata, chosenmatch} from './Feed.vue'
 import { onMounted, ref } from 'vue';
  const playerinfo = new Array
   const updated = ref(false);
+ let rounds =  0;
 
+ console.log(rounds)
 onMounted( () =>{
     const obj = matchdata.value
     console.log(obj.data[chosenmatch].players.all_players[1].name)
@@ -59,16 +64,17 @@ onMounted( () =>{
             assist: obj.data[chosenmatch].players.all_players[i].stats.assists,
             score: Math.round(obj.data[chosenmatch].players.all_players[i].stats.score / obj.data[chosenmatch].metadata.rounds_played),
             pic: obj.data[chosenmatch].players.all_players[i].assets.agent.small,
-            team: obj.data[chosenmatch].players.all_players[i].team
+            team: obj.data[chosenmatch].players.all_players[i].team,
+            rounds : obj.data[chosenmatch].metadata.rounds_played
 
         }
         console.log(playerinfo[i].score)
-        updated.value = true;
+        
     }
 
-    
-
-
+    rounds = obj.data[chosenmatch].metadata.rounds_played
+    console.log(rounds)
+    updated.value = true;
 
 
 })
@@ -109,7 +115,7 @@ td:first-child{
 }
 
 .tabs-component-tab {
-    color: #999;
+    color: rgb(255, 255, 255);
     font-size: 14px;
     font-weight: 600;
     margin-right: 0;

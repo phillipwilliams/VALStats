@@ -64,9 +64,7 @@ const options = ref([
 
   
 
-async function getData(url){
 
-}
 
 onMounted(async ()  =>{
   const docRef = doc(db, "users", curruser);
