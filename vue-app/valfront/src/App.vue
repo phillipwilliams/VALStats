@@ -31,7 +31,7 @@ const handleSignOut = () => {
 <template>
   <div>
     <nav>
-      <header><div class="logo"><router-link to="/" style="font-family:Valfont; text-decoration: none; font-size: 40px; color: white; text-align: left;" ><span style="color: #dc3d4b">V</span>ALSTATS</router-link></div>
+      <header><div class="logo"><router-link to="/" style="font-family:Valfont; text-decoration: none; font-size: 40px; color: white;" ><span style="color: #dc3d4b">V</span>ALSTATS</router-link></div>
       <router-link id="links" to="/feed"> Profile</router-link> 
       <router-link id="links" to="/sign-in"> Login</router-link> 
       <router-link id="links" to="/register"> Register</router-link> 
@@ -95,6 +95,7 @@ html, body{
   -moz-text-size-adjust: none;
   margin: 0 !important;
   padding: 0 !important;
+   background-color: #bcbcbc;
   
 }
 #submit:hover {

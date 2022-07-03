@@ -3,9 +3,9 @@ import App from './App.vue';
 import router from "./router";
 import { initializeApp } from "firebase/app";
 import {getFirestore } from "firebase/firestore";
-import vSelect from 'vue-select'
 import {Tabs, Tab} from 'vue3-tabs-component';
-import 'vue-select/dist/vue-select.css';
+
+
 
 
 const firebaseConfig = {
@@ -30,5 +30,4 @@ export{
 const myapp = createApp(App)
 myapp.component('tabs', Tabs)
 myapp.component('tab', Tab)
-myapp.component('v-select', vSelect)
 myapp.use(router).mount('#app')
