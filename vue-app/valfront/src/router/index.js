@@ -24,6 +24,10 @@ const router = createRouter({
         requiresAuth: true,
       },
     },
+    {
+      path: "/match",
+      component: () => import("../views/Match.vue"),
+    },
   ],
 });
 
