@@ -21,7 +21,7 @@
     <b>Agent: </b>{{matches[selected][2]}}
     <b>KDA: </b>{{matches[selected][3]}}/{{matches[selected][4]}}/{{matches[selected][5]}}
     <b>score: </b>{{matches[selected][6]}}-{{matches[selected][7]}}
-    <b> {{matches[selected][7]}}</b>
+    <b> {{matches[selected][8]}}</b>
     <button @click="gotoMatch" id="submit"> Select</button>
      </pre>
     </p>
@@ -85,7 +85,7 @@ onMounted(async ()  =>{
                 for(let j = 0; j <obj.data[i].players.all_players.length; j++ ){
                     if (obj.data[i].players.all_players[j].name.toLowerCase() == valname){
                         userteam = obj.data[i].players.all_players[j].team
-                        agent = userteam = obj.data[i].players.all_players[j].character
+                        agent = obj.data[i].players.all_players[j].character
                         elim = obj.data[i].players.all_players[j].stats.kills
                         death = obj.data[i].players.all_players[j].stats.deaths
                         assist = obj.data[i].players.all_players[j].stats.assists
