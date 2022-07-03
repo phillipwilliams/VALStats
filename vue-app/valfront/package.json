@@ -20,7 +20,8 @@
     "vue3-easy-data-table": "^1.2.27",
     "vue3-tabs": "^0.1.13-beta.3",
     "vue3-tabs-component": "^1.0.8",
-    "vuetify": "^2.6.0"
+    "vuetify": "^2.6.0",
+    "vuex": "^4.0.2"
   },
   "devDependencies": {
     "@firebase/rules-unit-testing": "^2.0.2",
