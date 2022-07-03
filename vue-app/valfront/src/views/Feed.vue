@@ -6,6 +6,7 @@
 <select
     style="width:300px;"
     v-model="selected">
+    <option value="" disabled> Select a Match</option>
     <option v-for="option in options" :value="option.value">
     {{ option.text }}
   </option>
@@ -28,7 +29,7 @@
 
 <script>
 export const matchdata = ref(null);
-export const chosenmatch = ref(null);
+export var chosenmatch;
 
 </script>
 <script setup>
@@ -100,14 +101,15 @@ onMounted(async ()  =>{
                 
 
                 matches.push([obj.data[i].metadata.map, obj.data[i].metadata.game_start_patched, agent, elim, death, assist, obj.data[i].teams.red.rounds_won, obj.data[i].teams.blue.rounds_won, winner])
-                matchdata.value = obj.data
+                matchdata.value = obj
             }
             updated.value = true;
         })
         })
 
 const gotoMatch = () => {
-    chosenmatch.value = selected.value
+    chosenmatch = selected.value
+
     router.push('/match')
     
 }
