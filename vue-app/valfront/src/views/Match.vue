@@ -1,23 +1,174 @@
 <template>
     <div>
     <tabs>
-        <tab name="First tab">
-            First tab content
+        <tab name="Scoreboard">
+            <div>
+                <center>
+                <table v-if="updated" style="width: 1400px">
+                    <thead style=" font-family: Valfont;">
+                        <tr>
+                            <th>Agent</th>
+                            <th>Name</th>
+                            <th>Elims</th>
+                            <th>Deaths</th>
+                            <th>Assists</th>
+                            <th>ACS</th>
+                        </tr>
+
+                </thead>
+                <tbody>
+                    <tr v-for="player in playerinfo ">
+                    <td :bgcolor="player.team"> <img :src="player.pic" height=75 width=75></td>
+                    <td ><b>{{player.name}}</b></td>
+                    <td>{{player.elim}}</td>
+                    <td>{{player.death}}</td>
+                    <td>{{player.assist}}</td>
+                    <td>{{player.score}}</td>
+                        </tr>
+                    
+                </tbody>
+                </table>
+                </center>
+            </div>
         </tab>
-        <tab name="Second tab">
+        <tab name="Round Breakdown">
             Second tab content
         </tab>
-        <tab name="Third tab">
-            Third tab content
-        </tab>
     </tabs>
+    
 </div>
 </template>
 
 
 <script setup>
 import {matchdata, chosenmatch} from './Feed.vue'
+import { onMounted, ref } from 'vue';
+ const playerinfo = new Array
+  const updated = ref(false);
+
+onMounted( () =>{
+    const obj = matchdata.value
+    console.log(obj.data[chosenmatch].players.all_players[1].name)
 
 
+    for(let i = 0; i <obj.data[chosenmatch].players.all_players.length; i++ ){
+        playerinfo[i] = {
+            name: obj.data[chosenmatch].players.all_players[i].name,
+            elim: obj.data[chosenmatch].players.all_players[i].stats.kills,
+            death: obj.data[chosenmatch].players.all_players[i].stats.deaths,
+            assist: obj.data[chosenmatch].players.all_players[i].stats.assists,
+            score: Math.round(obj.data[chosenmatch].players.all_players[i].stats.score / obj.data[chosenmatch].metadata.rounds_played),
+            pic: obj.data[chosenmatch].players.all_players[i].assets.agent.small,
+            team: obj.data[chosenmatch].players.all_players[i].team
+
+        }
+        console.log(playerinfo[i].score)
+        updated.value = true;
+    }
+
+    
+
+
+
+
+})
 
 </script>
+
+
+<style>
+.tabs-component {
+    margin: 4em 0;
+}
+table {
+  border:1px solid black;
+}
+th, td {
+    border:1px solid black;
+    max-width: 0px;
+    min-width: 0px;
+}
+td:first-child{
+    max-width: 0px;
+}
+.tabs-component-tabs {
+    border: solid 1px #ddd;
+    border-radius: 6px;
+    margin-bottom: 5px;
+}
+
+
+@media (min-width: 700px) {
+    .tabs-component-tabs {
+        border: 0;
+        align-items: stretch;
+        display: flex;
+        justify-content: flex-start;
+        margin-bottom: -1px;
+    }
+}
+
+.tabs-component-tab {
+    color: #999;
+    font-size: 14px;
+    font-weight: 600;
+    margin-right: 0;
+    list-style: none;
+}
+
+.tabs-component-tab:not(:last-child) {
+    border-bottom: dotted 1px #ddd;
+}
+
+.tabs-component-tab:hover {
+    color: #666;
+}
+
+.tabs-component-tab.is-active {
+    color: #000;
+}
+
+.tabs-component-tab.is-disabled * {
+    color: #cdcdcd;
+    cursor: not-allowed !important;
+}
+
+@media (min-width: 700px) {
+    .tabs-component-tab {
+        background-color: rgb(43, 42, 42);
+        border: solid 1px #ddd;
+        border-radius: 3px 3px 0 0;
+        margin-right: .5em;
+        transform: translateY(2px);
+        transition: transform .3s ease;
+    }
+
+    .tabs-component-tab.is-active {
+        border-bottom: solid 1px rgb(44, 40, 40);
+        z-index: 2;
+        transform: translateY(0);
+    }
+}
+
+.tabs-component-tab-a {
+    align-items: center;
+    color: inherit;
+    display: flex;
+    padding: .75em 1em;
+    text-decoration: none;
+}
+
+.tabs-component-panels {
+    padding: 4em 0;
+}
+
+@media (min-width: 700px) {
+    .tabs-component-panels {
+        background-color: rgb(255, 255, 255);
+        border: solid 1px #ddd;
+        border-radius: 0 6px 6px 6px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, .05);
+        padding: 4em 2em;
+    }
+}
+</style>
