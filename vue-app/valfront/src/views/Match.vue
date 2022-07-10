@@ -1,6 +1,26 @@
 <template>
     <div>
     <tabs>
+        <tab :name="valname">
+            <div>
+                <center>
+                <table v-if="updated" style="width: 1400px">
+                <thead style=" font-family:Valfont;">
+                <tr>
+                    <th><img :src="maploc"></th>
+                    <th>Score</th>
+                    <th>Agent</th>
+                    <th></th>
+                    <th></th>
+
+                </tr></thead>
+                <tbody>
+
+                </tbody>
+                </table> 
+                </center>
+            </div>
+        </tab>
         <tab name="Scoreboard">
             <div>
                 <center>
@@ -44,13 +64,14 @@
 
 
 <script setup>
-import {matchdata, chosenmatch} from './Feed.vue'
+import {matchdata, valname, chosenmatch} from './Feed.vue'
 import { onMounted, ref } from 'vue';
  const playerinfo = new Array
   const updated = ref(false);
  let rounds =  0;
+ let map;
 
- console.log(rounds)
+
 onMounted( () =>{
     const obj = matchdata.value
     console.log(obj.data[chosenmatch].players.all_players[1].name)
@@ -71,6 +92,10 @@ onMounted( () =>{
         console.log(playerinfo[i].score)
         
     }
+    let maploc = "../assets/" + obj.data[chosenmatch].metadata.map.toLowerCase() + ".png"
+
+    console.log(maploc)
+
 
     rounds = obj.data[chosenmatch].metadata.rounds_played
     console.log(rounds)
@@ -87,7 +112,8 @@ onMounted( () =>{
     margin: 4em 0;
 }
 table {
-  border:1px solid black;
+  border:3px solid black;
+  border-collapse:collapse;
 }
 th, td {
     border:1px solid black;
@@ -167,6 +193,7 @@ td:first-child{
 .tabs-component-panels {
     padding: 4em 0;
 }
+
 
 @media (min-width: 700px) {
     .tabs-component-panels {
