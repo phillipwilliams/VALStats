@@ -6,18 +6,36 @@
                 <center>
                 <table v-if="updated" style="width: 1400px">
                 <thead style=" font-family:Valfont;">
-                <tr>
-                    <th><img :src="maploc"></th>
-                    <th>Score</th>
+                <tr style="font-family:Valfont; text-decoration: none; font-size: 40px;">
+                    <th>Map</th>
+                    <th>Match Score</th>
                     <th>Agent</th>
-                    <th></th>
-                    <th></th>
+                    
 
                 </tr></thead>
                 <tbody>
-
+                    <tr style="font-family:Valfont; text-decoration: none; font-size: 40px;">
+                        <td><img :src="imageURL" height=220 width=375 />{{map}}</td>
+                        <td> <br> <br> {{redteam}} - {{blueteam}}<br> <br> <br> {{winner}}</td>
+                        <td><img :src="agentURL" height=220 width=220 /> <br> {{agent}}</td>
+                    </tr>
                 </tbody>
                 </table> 
+
+
+                <div>
+                <table v-if="updated" style="width: 1400px">
+                <thead style=" font-family:Valfont;">
+                <tr style="font-family:Valfont; text-decoration: none; font-size: 40px;">
+                    <th>Map</th>
+                    <th>Match Score</th>
+                    <th>Agent</th>
+                    
+
+                </tr></thead>
+                
+                </table>
+                </div>
                 </center>
             </div>
         </tab>
@@ -44,7 +62,7 @@
                     <td>{{player.death}}</td>
                     <td>{{player.assist}}</td>
                     <td>{{player.score}}</td>
-                        </tr>
+                    </tr>
                     
                 </tbody>
                 </table>
@@ -64,17 +82,26 @@
 
 
 <script setup>
-import {matchdata, valname, chosenmatch} from './Feed.vue'
+import {matchdata, valname, userindex, winner, chosenmatch} from './Feed.vue'
 import { onMounted, ref } from 'vue';
  const playerinfo = new Array
   const updated = ref(false);
  let rounds =  0;
- let map;
+ let map = matchdata.value.data[chosenmatch].metadata.map.toLowerCase();
+ let mapname = "../assets/" + map + ".png";
+ let redteam = matchdata.value.data[chosenmatch].teams.red.rounds_won
+ let blueteam = matchdata.value.data[chosenmatch].teams.blue.rounds_won
+ let agentpic = matchdata.value.data[chosenmatch].players.all_players[userindex].assets.agent.small
+ let agent = matchdata.value.data[chosenmatch].players.all_players[userindex].character
 
+
+ var imageURL = new URL(mapname, import.meta.url).href
+ var agentURL = new URL(agentpic, import.meta.url).href
+console.log(mapname)
+console.log(winner)
 
 onMounted( () =>{
     const obj = matchdata.value
-    console.log(obj.data[chosenmatch].players.all_players[1].name)
 
 
     for(let i = 0; i <obj.data[chosenmatch].players.all_players.length; i++ ){
@@ -92,9 +119,10 @@ onMounted( () =>{
         console.log(playerinfo[i].score)
         
     }
-    let maploc = "../assets/" + obj.data[chosenmatch].metadata.map.toLowerCase() + ".png"
-
-    console.log(maploc)
+    
+    
+    console.log(redteam + "-" + blueteam)
+    
 
 
     rounds = obj.data[chosenmatch].metadata.rounds_played
@@ -104,21 +132,25 @@ onMounted( () =>{
 
 })
 
+
+
 </script>
 
 
 <style>
 .tabs-component {
-    margin: 4em 0;
+    margin: 5em 0;
 }
 table {
   border:3px solid black;
   border-collapse:collapse;
+  margin: 4em 0;
 }
 th, td {
     border:1px solid black;
     max-width: 0px;
     min-width: 0px;
+    text-align: center;
 }
 td:first-child{
     max-width: 0px;

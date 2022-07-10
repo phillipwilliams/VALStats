@@ -32,6 +32,8 @@ export const matchdata = ref(null);
 export var chosenmatch;
 export let userpid;
 export let valname;
+export let userindex;
+export let winner;
 
 </script>
 <script setup>
@@ -47,7 +49,6 @@ export let valname;
   const updated = ref(false);
   const matches = []
   let userteam;
-  let winner;
   let elim;
   let death;
   let assist;
@@ -92,13 +93,14 @@ onMounted(async ()  =>{
                         death = obj.data[i].players.all_players[j].stats.deaths
                         assist = obj.data[i].players.all_players[j].stats.assists
                         userpid = obj.data[i].players.all_players[j].puuid
+                        userindex = j;
                     }
                 }
                 if(obj.data[i].teams.red.rounds_won > obj.data[i].teams.blue.rounds_won) winner = "Red"
                 else winner = "Blue"
                 
                 winner = (winner == userteam) ? "Won" : "Lost" 
-                console.log(userpid)
+                
 
                 matches.push([obj.data[i].metadata.map, obj.data[i].metadata.game_start_patched, agent, elim, death, assist, obj.data[i].teams.red.rounds_won, obj.data[i].teams.blue.rounds_won, winner])
                 matchdata.value = obj
