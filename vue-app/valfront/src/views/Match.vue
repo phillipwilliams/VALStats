@@ -1,44 +1,7 @@
 <template>
     <div>
     <tabs>
-        <tab :name="valname">
-            <div>
-                <center>
-                <table v-if="updated" style="width: 1400px">
-                <thead style=" font-family:Valfont;">
-                <tr style="font-family:Valfont; text-decoration: none; font-size: 40px;">
-                    <th>Map</th>
-                    <th>Match Score</th>
-                    <th>Agent</th>
-                    
-
-                </tr></thead>
-                <tbody>
-                    <tr style="font-family:Valfont; text-decoration: none; font-size: 40px;">
-                        <td><img :src="imageURL" height=220 width=375 />{{map}}</td>
-                        <td> <br> <br> {{redteam}} - {{blueteam}}<br> <br> <br> {{winner}}</td>
-                        <td><img :src="agentURL" height=220 width=220 /> <br> {{agent}}</td>
-                    </tr>
-                </tbody>
-                </table> 
-
-
-                <div>
-                <table v-if="updated" style="width: 1400px">
-                <thead style=" font-family:Valfont;">
-                <tr style="font-family:Valfont; text-decoration: none; font-size: 40px;">
-                    <th>Map</th>
-                    <th>Match Score</th>
-                    <th>Agent</th>
-                    
-
-                </tr></thead>
-                
-                </table>
-                </div>
-                </center>
-            </div>
-        </tab>
+        
         <tab name="Scoreboard">
             <div>
                 <center>
@@ -69,6 +32,60 @@
                 </center>
             </div>
         </tab>
+        <tab :name="valname">
+            <div>
+                <center>
+                <p style="font-family:Valfont; text-decoration: none; font-size: 50px;">Match Stats</p>
+                <table v-if="updated" style="width: 1400px">
+                <thead style=" font-family:Valfont;">
+                <tr style="font-family:Valfont; text-decoration: none; font-size: 40px;">
+                    <th>Map</th>
+                    <th>Match Score</th>
+                    <th>Agent</th>
+                    
+
+                </tr></thead>
+                <tbody>
+                    <tr style="font-family:Valfont; text-decoration: none; font-size: 50px;">
+                        <td><img :src="imageURL" height=180 width=325 />{{map}}</td>
+                        <td> <br> {{redteam}} - {{blueteam}} <br> <br> {{winner}}</td>
+                        <td><img :src="agentURL" height=180 width=180 /> <br> {{agent}}</td>
+                    </tr>
+                </tbody>
+                </table> 
+                <br>
+                <br>
+                <p style="font-family:Valfont; text-decoration: none; font-size: 40px;"><b>{{valname}}</b> Stats</p>
+                <div>
+                <table v-if="updated" style="width: 1400px">
+                <thead style=" font-family:Valfont;">
+                <tr style="font-family:Valfont; text-decoration: none; font-size: 25px;">
+                    <th>Eliminations</th>
+                    <th>Deaths</th>
+                    <th>Average Combat Score</th>
+                    <th>Headshot %</th>
+                    <th>Bodyshot %</th>
+                    <th>Most Used Weapon</th>
+                    
+                    
+
+                </tr></thead>
+                <tbody>
+                    <tr style="font-family:calibri; text-decoration: none; font-size: 25px;">
+                    <td>{{playerelim}}</td>
+                    <td>{{playerdeath}}</td>
+                    <td>{{playerassist}}</td>
+                    <td>{{hspercent}}</td>
+                    <td>{{bodypercent}}</td>
+                    <td><img :src="weaponURL" height = 50 width="175"/>{{mostused[0]}} : {{mostused[1]}} kills</td>
+
+                </tr>    
+                </tbody>
+                </table>
+                </div>
+                </center>
+            </div>
+        </tab>
         <tab name="Round Breakdown">
            <tabs v-if="updated" :options="{ useUrlFragment: false }">
             <tab v-for="index in playerinfo[0].rounds" :id="index" :name="index">{{index}}</tab>
@@ -78,12 +95,18 @@
     </tabs>
     
 </div>
+
+<div><button @click="goBackToFeed" id="backbtn"> Choose a different Match</button>
+
+</div>
 </template>
 
 
 <script setup>
-import {matchdata, valname, userindex, winner, chosenmatch} from './Feed.vue'
+import {matchdata, valname, playerindex, winner, chosenmatch} from './Feed.vue'
 import { onMounted, ref } from 'vue';
+import router from '../router';
+
  const playerinfo = new Array
   const updated = ref(false);
  let rounds =  0;
@@ -91,14 +114,42 @@ import { onMounted, ref } from 'vue';
  let mapname = "../assets/" + map + ".png";
  let redteam = matchdata.value.data[chosenmatch].teams.red.rounds_won
  let blueteam = matchdata.value.data[chosenmatch].teams.blue.rounds_won
- let agentpic = matchdata.value.data[chosenmatch].players.all_players[userindex].assets.agent.small
- let agent = matchdata.value.data[chosenmatch].players.all_players[userindex].character
+ let agentpic = matchdata.value.data[chosenmatch].players.all_players[playerindex].assets.agent.small
+ let agent = matchdata.value.data[chosenmatch].players.all_players[playerindex].character
 
+ let playerelim = matchdata.value.data[chosenmatch].players.all_players[playerindex].stats.kills
+ let playerassist = matchdata.value.data[chosenmatch].players.all_players[playerindex].stats.assists
+ let playerdeath = matchdata.value.data[chosenmatch].players.all_players[playerindex].stats.deaths
+ let playerscore = Math.round(matchdata.value.data[chosenmatch].players.all_players[playerindex].stats.score / matchdata.value.data[chosenmatch].metadata.rounds_played)
+ let totalhit = matchdata.value.data[chosenmatch].players.all_players[playerindex].stats.bodyshots + matchdata.value.data[chosenmatch].players.all_players[playerindex].stats.headshots + matchdata.value.data[chosenmatch].players.all_players[playerindex].stats.legshots
+ let hspercent  = Math.round((matchdata.value.data[chosenmatch].players.all_players[playerindex].stats.headshots / totalhit) * 100)
+ let bodypercent =  Math.round(((matchdata.value.data[chosenmatch].players.all_players[playerindex].stats.bodyshots + matchdata.value.data[chosenmatch].players.all_players[playerindex].stats.legshots)  / totalhit) * 100)
 
  var imageURL = new URL(mapname, import.meta.url).href
  var agentURL = new URL(agentpic, import.meta.url).href
+ var weaponimg;
+ var weaponURL;
+ let mostused;
+ const weapons = new Map();
 console.log(mapname)
 console.log(winner)
+
+
+
+for ( let i = 0; i < matchdata.value.data[chosenmatch].kills.length; i++){
+        if(matchdata.value.data[chosenmatch].kills[i].killer_display_name.includes(matchdata.value.data[chosenmatch].players.all_players[playerindex].name) && (matchdata.value.data[chosenmatch].kills[i].damage_weapon_name )){
+            weapons.set(matchdata.value.data[chosenmatch].kills[i].damage_weapon_name, (weapons.get(matchdata.value.data[chosenmatch].kills[i].damage_weapon_name) ?? 0) + 1)
+        }
+    }
+    mostused =[...weapons.entries()].reduce((a, e ) => e[1] > a[1] ? e : a)
+    console.log(mostused)
+
+for ( let i = 0; i < matchdata.value.data[chosenmatch].kills.length; i++){
+    if(matchdata.value.data[chosenmatch].kills[i].damage_weapon_name == mostused[0])
+    weaponimg = matchdata.value.data[chosenmatch].kills[i].damage_weapon_assets.display_icon
+    weaponURL = new URL(weaponimg, import.meta.url).href
+}
+
 
 onMounted( () =>{
     const obj = matchdata.value
@@ -122,15 +173,22 @@ onMounted( () =>{
     
     
     console.log(redteam + "-" + blueteam)
-    
 
 
     rounds = obj.data[chosenmatch].metadata.rounds_played
     console.log(rounds)
     updated.value = true;
-
+    
 
 })
+
+const goBackToFeed = () => {
+    
+    
+    router.push('/feed')
+    
+}
+
 
 
 
@@ -144,7 +202,7 @@ onMounted( () =>{
 table {
   border:3px solid black;
   border-collapse:collapse;
-  margin: 4em 0;
+  margin: 2em 0;
 }
 th, td {
     border:1px solid black;
@@ -235,5 +293,11 @@ td:first-child{
         box-shadow: 0 0 10px rgba(0, 0, 0, .05);
         padding: 4em 2em;
     }
+}
+
+button{
+    margin: 10px;
+    font-size: 20px;
+    
 }
 </style>

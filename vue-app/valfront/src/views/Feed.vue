@@ -32,8 +32,8 @@ export const matchdata = ref(null);
 export var chosenmatch;
 export let userpid;
 export let valname;
-export let userindex;
 export let winner;
+export let playerindex;
 
 </script>
 <script setup>
@@ -53,6 +53,7 @@ export let winner;
   let death;
   let assist;
   let agent;
+  let userindex;
 
 const selected = ref('0')
 
@@ -71,13 +72,21 @@ const options = ref([
 
 onMounted(async ()  =>{
   const docRef = doc(db, "users", curruser);
+  try{
   const docSnap = await getDoc(docRef);
+
   if (docSnap.exists()){
     
     valname = docSnap.data().ValID;
     valregion = docSnap.data().ValRegion;
   }
-  const reqmsg = "https://api.henrikdev.xyz/valorant/v3/matches/na/" + valname + "/" + valregion;
+  } catch(e){
+    alert("Firebase Error, please retry")
+    router.push('/')
+  }
+  
+
+  const reqmsg = "https://api.henrikdev.xyz/valorant/v3/matches/na/" + valname + "/" + valregion + "?filter=competitive";
     
     fetch(reqmsg)
         .then(function(response)  {
@@ -102,15 +111,20 @@ onMounted(async ()  =>{
                 winner = (winner == userteam) ? "Won" : "Lost" 
                 
 
-                matches.push([obj.data[i].metadata.map, obj.data[i].metadata.game_start_patched, agent, elim, death, assist, obj.data[i].teams.red.rounds_won, obj.data[i].teams.blue.rounds_won, winner])
+                matches.push([obj.data[i].metadata.map, obj.data[i].metadata.game_start_patched, agent, elim, death, assist, obj.data[i].teams.red.rounds_won, obj.data[i].teams.blue.rounds_won, winner, userindex])
                 matchdata.value = obj
             }
             updated.value = true;
         })
+        .catch((error) =>{
+            alert("Valorant API Error, please retry");
+            router.push("/");
+          });
         })
 
 const gotoMatch = () => {
     chosenmatch = selected.value
+    playerindex = matches[chosenmatch][9]
     
     router.push('/match')
     
