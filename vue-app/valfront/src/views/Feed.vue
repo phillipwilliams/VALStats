@@ -30,6 +30,8 @@
 <script>
 export const matchdata = ref(null);
 export var chosenmatch;
+export let userpid;
+export let valname;
 
 </script>
 <script setup>
@@ -41,7 +43,7 @@ export var chosenmatch;
   
 
   let curruser = getAuth().currentUser.email;
-  let valname, valregion;
+  let valregion;
   const updated = ref(false);
   const matches = []
   let userteam;
@@ -83,20 +85,20 @@ onMounted(async ()  =>{
         .then(function(obj){
             for(let i = 0; i < obj.data.length; i++){
                 for(let j = 0; j <obj.data[i].players.all_players.length; j++ ){
-                    if (obj.data[i].players.all_players[j].name.toLowerCase() == valname){
+                    if (obj.data[i].players.all_players[j].name.toLowerCase() == valname.toLowerCase()){
                         userteam = obj.data[i].players.all_players[j].team
                         agent = obj.data[i].players.all_players[j].character
                         elim = obj.data[i].players.all_players[j].stats.kills
                         death = obj.data[i].players.all_players[j].stats.deaths
                         assist = obj.data[i].players.all_players[j].stats.assists
+                        userpid = obj.data[i].players.all_players[j].puuid
                     }
                 }
-                
                 if(obj.data[i].teams.red.rounds_won > obj.data[i].teams.blue.rounds_won) winner = "Red"
                 else winner = "Blue"
                 
                 winner = (winner == userteam) ? "Won" : "Lost" 
-                
+                console.log(userpid)
 
                 matches.push([obj.data[i].metadata.map, obj.data[i].metadata.game_start_patched, agent, elim, death, assist, obj.data[i].teams.red.rounds_won, obj.data[i].teams.blue.rounds_won, winner])
                 matchdata.value = obj
@@ -107,7 +109,7 @@ onMounted(async ()  =>{
 
 const gotoMatch = () => {
     chosenmatch = selected.value
-
+    
     router.push('/match')
     
 }
