@@ -1,37 +1,6 @@
 <template>
     <div>
     <tabs>
-        
-        <tab name="Scoreboard">
-            <div>
-                <center>
-                <table v-if="updated" style="width: 1400px">
-                    <thead style=" font-family: Valfont;">
-                        <tr>
-                            <th>Agent</th>
-                            <th>Name</th>
-                            <th>Elims</th>
-                            <th>Deaths</th>
-                            <th>Assists</th>
-                            <th>ACS</th>
-                        </tr>
-
-                </thead>
-                <tbody>
-                    <tr v-for="player in playerinfo ">
-                    <td :bgcolor="player.team"> <img :src="player.pic" height=75 width=75></td>
-                    <td ><b>{{player.name}}</b></td>
-                    <td>{{player.elim}}</td>
-                    <td>{{player.death}}</td>
-                    <td>{{player.assist}}</td>
-                    <td>{{player.score}}</td>
-                    </tr>
-                    
-                </tbody>
-                </table>
-                </center>
-            </div>
-        </tab>
         <tab :name="valname">
             <div>
                 <center>
@@ -77,12 +46,42 @@
                     <td>{{playerassist}}</td>
                     <td>{{hspercent}}</td>
                     <td>{{bodypercent}}</td>
-                    <td><img :src="weaponURL" height = 50 width="175"/>{{mostused[0]}} : {{mostused[1]}} kills</td>
+                    <td><img :src="weaponURL" height = 50 width="175"/><br>{{mostused[0]}} : {{mostused[1]}} elims</td>
 
                 </tr>    
                 </tbody>
                 </table>
                 </div>
+                </center>
+            </div>
+        </tab>
+        <tab name="Scoreboard">
+            <div>
+                <center>
+                <table v-if="updated" style="width: 1400px">
+                    <thead style=" font-family: Valfont;">
+                        <tr>
+                            <th>Agent</th>
+                            <th>Name</th>
+                            <th>Elims</th>
+                            <th>Deaths</th>
+                            <th>Assists</th>
+                            <th>ACS</th>
+                        </tr>
+
+                </thead>
+                <tbody>
+                    <tr v-for="player in playerinfo ">
+                    <td :bgcolor="player.team"> <img :src="player.pic" height=75 width=75></td>
+                    <td ><b>{{player.name}}</b></td>
+                    <td>{{player.elim}}</td>
+                    <td>{{player.death}}</td>
+                    <td>{{player.assist}}</td>
+                    <td>{{player.score}}</td>
+                    </tr>
+                    
+                </tbody>
+                </table>
                 </center>
             </div>
         </tab>
