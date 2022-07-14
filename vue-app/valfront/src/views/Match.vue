@@ -1,5 +1,5 @@
-<template>
-    <div>
+<template v-if="updated">
+    <div id="divtab">
     <tabs>
         <tab :name="valname">
             <div>
@@ -14,11 +14,11 @@
                     
 
                 </tr></thead>
-                <tbody>
+                <tbody v-if="updated">
                     <tr style="font-family:Valfont; text-decoration: none; font-size: 50px;">
-                        <td><img :src="imageURL" height=180 width=325 />{{map}}</td>
-                        <td> <br> {{redteam}} - {{blueteam}} <br> <br> {{winner}}</td>
-                        <td><img :src="agentURL" height=180 width=180 /> <br> {{agent}}</td>
+                        <td v-if="updated"><img  :src="imageURL" height=180 width=325 /><br>{{map}}</td>
+                        <td v-if="updated"> <br> {{redteam}} - {{blueteam}} <br> <br> {{winner}}</td>
+                        <td v-if="updated"><img :src="agentURL" height=180 width=180 /> <br> {{agent}}</td>
                     </tr>
                 </tbody>
                 </table> 
@@ -31,6 +31,7 @@
                 <tr style="font-family:Valfont; text-decoration: none; font-size: 25px;">
                     <th>Eliminations</th>
                     <th>Deaths</th>
+                    <th>Assists</th>
                     <th>Average Combat Score</th>
                     <th>Headshot %</th>
                     <th>Bodyshot %</th>
@@ -39,14 +40,15 @@
                     
 
                 </tr></thead>
-                <tbody>
-                    <tr style="font-family:calibri; text-decoration: none; font-size: 25px;">
+                <tbody v-if="updated">
+                    <tr v-if="updated" style="font-family:calibri; text-decoration: none; font-size: 25px;">
                     <td>{{playerelim}}</td>
                     <td>{{playerdeath}}</td>
                     <td>{{playerassist}}</td>
+                    <td>{{playerscore}}</td>
                     <td>{{hspercent}}</td>
                     <td>{{bodypercent}}</td>
-                    <td><img :src="weaponURL" height = 50 width="175"/><br>{{mostused[0]}} : {{mostused[1]}} elims</td>
+                    <td><img v-if="updated" :src="weaponURL" height = 50 width="175"/><br>{{mostused[0]}}: {{mostused[1]}} elims</td>
 
                 </tr>    
                 </tbody>
@@ -100,70 +102,82 @@
 </div>
 </template>
 
-
-<script setup>
-import {matchdata, valname, playerindex, winner, chosenmatch} from './Feed.vue'
-import { onMounted, ref } from 'vue';
-import router from '../router';
-
+<script> 
  const playerinfo = new Array
-  const updated = ref(false);
+ const updated = ref(false);
  let rounds =  0;
- let map = matchdata.value.data[chosenmatch].metadata.map.toLowerCase();
- let mapname = "../assets/" + map + ".png";
- let redteam = matchdata.value.data[chosenmatch].teams.red.rounds_won
- let blueteam = matchdata.value.data[chosenmatch].teams.blue.rounds_won
- let agentpic = matchdata.value.data[chosenmatch].players.all_players[playerindex].assets.agent.small
- let agent = matchdata.value.data[chosenmatch].players.all_players[playerindex].character
+ let map;
+ let mapname;
+ let redteam;
+ let blueteam;
+ let agentpic;
+ let agent; 
 
- let playerelim = matchdata.value.data[chosenmatch].players.all_players[playerindex].stats.kills
- let playerassist = matchdata.value.data[chosenmatch].players.all_players[playerindex].stats.assists
- let playerdeath = matchdata.value.data[chosenmatch].players.all_players[playerindex].stats.deaths
- let playerscore = Math.round(matchdata.value.data[chosenmatch].players.all_players[playerindex].stats.score / matchdata.value.data[chosenmatch].metadata.rounds_played)
- let totalhit = matchdata.value.data[chosenmatch].players.all_players[playerindex].stats.bodyshots + matchdata.value.data[chosenmatch].players.all_players[playerindex].stats.headshots + matchdata.value.data[chosenmatch].players.all_players[playerindex].stats.legshots
- let hspercent  = Math.round((matchdata.value.data[chosenmatch].players.all_players[playerindex].stats.headshots / totalhit) * 100)
- let bodypercent =  Math.round(((matchdata.value.data[chosenmatch].players.all_players[playerindex].stats.bodyshots + matchdata.value.data[chosenmatch].players.all_players[playerindex].stats.legshots)  / totalhit) * 100)
+ let playerelim;
+ let playerassist;
+ let playerdeath;
+ let playerscore;
+ let totalhit; 
+ let hspercent;  
+ let bodypercent;
 
- var imageURL = new URL(mapname, import.meta.url).href
- var agentURL = new URL(agentpic, import.meta.url).href
+ var imageURL;
+ var agentURL;
  var weaponimg;
  var weaponURL;
  let mostused;
  const weapons = new Map();
-console.log(mapname)
-console.log(winner)
+
+
+export function poppage(){
+     
+    map = matchdata.value.data[chosenmatch].metadata.map.toLowerCase();
+    mapname = "../assets/" + map + ".png";
+    redteam = matchdata.value.data[chosenmatch].teams.red.rounds_won
+    blueteam = matchdata.value.data[chosenmatch].teams.blue.rounds_won
+    agentpic = matchdata.value.data[chosenmatch].players.all_players[playerindex].assets.agent.small
+    agent = matchdata.value.data[chosenmatch].players.all_players[playerindex].character
+    playerelim = matchdata.value.data[chosenmatch].players.all_players[playerindex].stats.kills
+    playerassist = matchdata.value.data[chosenmatch].players.all_players[playerindex].stats.assists
+    playerdeath = matchdata.value.data[chosenmatch].players.all_players[playerindex].stats.deaths
+    playerscore = Math.round(matchdata.value.data[chosenmatch].players.all_players[playerindex].stats.score / matchdata.value.data[chosenmatch].metadata.rounds_played)
+    totalhit = matchdata.value.data[chosenmatch].players.all_players[playerindex].stats.bodyshots + matchdata.value.data[chosenmatch].players.all_players[playerindex].stats.headshots + matchdata.value.data[chosenmatch].players.all_players[playerindex].stats.legshots
+    hspercent  = Math.round((matchdata.value.data[chosenmatch].players.all_players[playerindex].stats.headshots / totalhit) * 100)
+    bodypercent =  Math.round(((matchdata.value.data[chosenmatch].players.all_players[playerindex].stats.bodyshots + matchdata.value.data[chosenmatch].players.all_players[playerindex].stats.legshots)  / totalhit) * 100)
+    imageURL = new URL(mapname, import.meta.url).href
+    agentURL = new URL(agentpic, import.meta.url).href
+    console.log(mapname)
+    console.log(winner)
 
 
 
-for ( let i = 0; i < matchdata.value.data[chosenmatch].kills.length; i++){
-        if(matchdata.value.data[chosenmatch].kills[i].killer_display_name.includes(matchdata.value.data[chosenmatch].players.all_players[playerindex].name) && (matchdata.value.data[chosenmatch].kills[i].damage_weapon_name )){
-            weapons.set(matchdata.value.data[chosenmatch].kills[i].damage_weapon_name, (weapons.get(matchdata.value.data[chosenmatch].kills[i].damage_weapon_name) ?? 0) + 1)
+    for ( let i = 0; i < matchdata.value.data[chosenmatch].kills.length; i++){
+            if(matchdata.value.data[chosenmatch].kills[i].killer_display_name.includes(matchdata.value.data[chosenmatch].players.all_players[playerindex].name) && (matchdata.value.data[chosenmatch].kills[i].damage_weapon_name )){
+                weapons.set(matchdata.value.data[chosenmatch].kills[i].damage_weapon_name, (weapons.get(matchdata.value.data[chosenmatch].kills[i].damage_weapon_name) ?? 0) + 1)
+            }
         }
+        mostused =[...weapons.entries()].reduce((a, e ) => e[1] > a[1] ? e : a)
+        console.log(mostused)
+
+    for ( let i = 0; i < matchdata.value.data[chosenmatch].kills.length; i++){
+        if(matchdata.value.data[chosenmatch].kills[i].damage_weapon_name == mostused[0])
+        weaponimg = matchdata.value.data[chosenmatch].kills[i].damage_weapon_assets.display_icon
+        weaponURL = new URL(weaponimg, import.meta.url).href
     }
-    mostused =[...weapons.entries()].reduce((a, e ) => e[1] > a[1] ? e : a)
-    console.log(mostused)
 
-for ( let i = 0; i < matchdata.value.data[chosenmatch].kills.length; i++){
-    if(matchdata.value.data[chosenmatch].kills[i].damage_weapon_name == mostused[0])
-    weaponimg = matchdata.value.data[chosenmatch].kills[i].damage_weapon_assets.display_icon
-    weaponURL = new URL(weaponimg, import.meta.url).href
-}
+  
 
 
-onMounted( () =>{
-    const obj = matchdata.value
-
-
-    for(let i = 0; i <obj.data[chosenmatch].players.all_players.length; i++ ){
+    for(let i = 0; i <matchdata.value.data[chosenmatch].players.all_players.length; i++ ){
         playerinfo[i] = {
-            name: obj.data[chosenmatch].players.all_players[i].name,
-            elim: obj.data[chosenmatch].players.all_players[i].stats.kills,
-            death: obj.data[chosenmatch].players.all_players[i].stats.deaths,
-            assist: obj.data[chosenmatch].players.all_players[i].stats.assists,
-            score: Math.round(obj.data[chosenmatch].players.all_players[i].stats.score / obj.data[chosenmatch].metadata.rounds_played),
-            pic: obj.data[chosenmatch].players.all_players[i].assets.agent.small,
-            team: obj.data[chosenmatch].players.all_players[i].team,
-            rounds : obj.data[chosenmatch].metadata.rounds_played
+            name: matchdata.value.data[chosenmatch].players.all_players[i].name,
+            elim: matchdata.value.data[chosenmatch].players.all_players[i].stats.kills,
+            death: matchdata.value.data[chosenmatch].players.all_players[i].stats.deaths,
+            assist: matchdata.value.data[chosenmatch].players.all_players[i].stats.assists,
+            score: Math.round(matchdata.value.data[chosenmatch].players.all_players[i].stats.score / matchdata.value.data[chosenmatch].metadata.rounds_played),
+            pic: matchdata.value.data[chosenmatch].players.all_players[i].assets.agent.small,
+            team: matchdata.value.data[chosenmatch].players.all_players[i].team,
+            rounds : matchdata.value.data[chosenmatch].metadata.rounds_played
 
         }
         console.log(playerinfo[i].score)
@@ -174,8 +188,23 @@ onMounted( () =>{
     console.log(redteam + "-" + blueteam)
 
 
-    rounds = obj.data[chosenmatch].metadata.rounds_played
+    rounds = matchdata.value.data[chosenmatch].metadata.rounds_played
     console.log(rounds)
+
+}
+</script>
+
+<script setup>
+import {matchdata, valname, playerindex, winner, chosenmatch} from './Feed.vue'
+import { onMounted, ref } from 'vue';
+import router from '../router';
+
+ 
+
+
+poppage()
+
+onMounted( () =>{
     updated.value = true;
     
 
@@ -295,7 +324,7 @@ td:first-child{
 }
 
 button{
-    margin: 10px;
+    margin: 2px;
     font-size: 20px;
     
 }

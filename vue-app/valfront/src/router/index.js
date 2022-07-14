@@ -1,7 +1,7 @@
 
 import { createRouter, createWebHistory } from "vue-router";
 import { getAuth} from 'firebase/auth';
-import {matchdata, chosenmatch} from '../views/Feed.vue'
+
 
 
 const router = createRouter({
