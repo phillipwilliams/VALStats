@@ -2,6 +2,8 @@
 import { createRouter, createWebHistory } from "vue-router";
 import { getAuth} from 'firebase/auth';
 
+
+
 const router = createRouter({
   history: createWebHistory(),
   routes: [
@@ -23,6 +25,13 @@ const router = createRouter({
       meta: {
         requiresAuth: true,
       },
+    },
+    {
+      path: "/match",
+      component: () => import("../views/Match.vue"),
+      meta: {
+        requiresData: true,
+      }
     },
   ],
 });

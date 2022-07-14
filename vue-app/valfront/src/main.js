@@ -2,7 +2,10 @@ import { createApp } from 'vue';
 import App from './App.vue';
 import router from "./router";
 import { initializeApp } from "firebase/app";
-import {getFirestore } from "firebase/firestore";
+import {getFirestore, initializeFirestore } from "firebase/firestore";
+import {Tabs, Tab} from 'vue3-tabs-component';
+
+
 
 
 const firebaseConfig = {
@@ -15,13 +18,23 @@ const firebaseConfig = {
     measurementId: "G-PGS46EXKVS"
   };
 
+ 
+
 
   
 
 const fbdb = initializeApp(firebaseConfig);
+
+const firestoredb = initializeFirestore(fbdb, {
+  experimentalForceLongPolling: true,
+});
+
 const db = getFirestore(fbdb)
 
 export{
   db
 }
-createApp(App).use(router).mount('#app')
+const myapp = createApp(App)
+myapp.component('tabs', Tabs)
+myapp.component('tab', Tab)
+myapp.use(router).mount('#app')
