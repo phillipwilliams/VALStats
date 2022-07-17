@@ -149,7 +149,7 @@ export function poppage(){
     console.log(mapname)
     console.log(winner)
 
-
+    weapons.clear();
 
     for ( let i = 0; i < matchdata.value.data[chosenmatch].kills.length; i++){
             if(matchdata.value.data[chosenmatch].kills[i].killer_display_name.includes(matchdata.value.data[chosenmatch].players.all_players[playerindex].name) && (matchdata.value.data[chosenmatch].kills[i].damage_weapon_name )){
