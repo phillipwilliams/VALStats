@@ -89,7 +89,40 @@
         </tab>
         <tab name="Round Breakdown">
            <tabs v-if="updated" :options="{ useUrlFragment: false }">
-            <tab v-for="index in playerinfo[0].rounds" :id="index" :name="index"><img v-if="updated" :src="minimapURL" /></tab>
+            <tab v-for="index in playerinfo[0].rounds" :id="index" :name="index">
+            <center>
+            <p style="font-family:Valfont; text-decoration: none; font-size: 50px;">Eliminated</p>
+            <table v-if="updated" style="width: 1400px">
+                    <thead style=" font-family: Valfont;">
+                        <tr>
+                            <th>Eliminated</th>
+                            
+                            
+                            
+                            
+                            
+                        </tr>
+
+                </thead>
+            </table>
+
+            <p style="font-family:Valfont; text-decoration: none; font-size: 50px;">Death</p>
+            <table v-if="updated" style="width: 1400px">
+                    <thead style=" font-family: Valfont;">
+                        <tr>
+                            <th>Elimed By</th>
+                            
+                            
+                            
+                            
+                            
+                        </tr>
+
+                </thead>
+            </table>
+            </center>
+            <img v-if="updated" :src="minimapURL" />
+            </tab>
             
            </tabs>
         </tab>
@@ -250,6 +283,7 @@ function popround(roundnum, rndindx){
             }
         }
     }
+
     
     
     
