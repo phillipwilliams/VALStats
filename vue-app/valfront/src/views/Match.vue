@@ -89,7 +89,7 @@
         </tab>
         <tab name="Round Breakdown">
            <tabs v-if="updated" :options="{ useUrlFragment: false }">
-            <tab v-for="index in playerinfo[0].rounds" :id="index" :name="index">{{index}}</tab>
+            <tab v-for="index in playerinfo[0].rounds" :id="index" :name="index"><img v-if="updated" :src="minimapURL" /></tab>
             
            </tabs>
         </tab>
@@ -103,7 +103,10 @@
 </template>
 
 <script> 
- const playerinfo = new Array
+ const playerinfo = new Array;
+ const elimevents = new Array;
+ const deathevents = new Array;
+
  const updated = ref(false);
  let rounds =  0;
  let map;
@@ -126,12 +129,16 @@
  var weaponimg;
  var weaponURL;
  let mostused;
+ var mapplayed ={};
+ var minimapURL;
  const weapons = new Map();
+
+
+
 
 
 export function poppage(){
      
-    map = matchdata.value.data[chosenmatch].metadata.map.toLowerCase();
     mapname = "../assets/" + map + ".png";
     redteam = matchdata.value.data[chosenmatch].teams.red.rounds_won
     blueteam = matchdata.value.data[chosenmatch].teams.blue.rounds_won
@@ -144,10 +151,7 @@ export function poppage(){
     totalhit = matchdata.value.data[chosenmatch].players.all_players[playerindex].stats.bodyshots + matchdata.value.data[chosenmatch].players.all_players[playerindex].stats.headshots + matchdata.value.data[chosenmatch].players.all_players[playerindex].stats.legshots
     hspercent  = Math.round((matchdata.value.data[chosenmatch].players.all_players[playerindex].stats.headshots / totalhit) * 100)
     bodypercent =  Math.round(((matchdata.value.data[chosenmatch].players.all_players[playerindex].stats.bodyshots + matchdata.value.data[chosenmatch].players.all_players[playerindex].stats.legshots)  / totalhit) * 100)
-    imageURL = new URL(mapname, import.meta.url).href
     agentURL = new URL(agentpic, import.meta.url).href
-    console.log(mapname)
-    console.log(winner)
 
     weapons.clear();
 
@@ -157,7 +161,7 @@ export function poppage(){
             }
         }
         mostused =[...weapons.entries()].reduce((a, e ) => e[1] > a[1] ? e : a)
-        console.log(mostused)
+        
 
     for ( let i = 0; i < matchdata.value.data[chosenmatch].kills.length; i++){
         if(matchdata.value.data[chosenmatch].kills[i].damage_weapon_name == mostused[0])
@@ -180,17 +184,75 @@ export function poppage(){
             rounds : matchdata.value.data[chosenmatch].metadata.rounds_played
 
         }
-        console.log(playerinfo[i].score)
+        
         
     }
     
     
-    console.log(redteam + "-" + blueteam)
+    
 
 
     rounds = matchdata.value.data[chosenmatch].metadata.rounds_played
-    console.log(rounds)
+    
 
+}
+
+
+function popround(roundnum, rndindx){
+    let didelim = false;
+    let diddie = false;
+    let killerlocx;
+    let killerlocy;
+    let numkills;
+    elimevents[rndindx] = new Array;
+    
+    for(let i = 0; i < roundnum.player_stats.length; i++){
+        if(!roundnum.player_stats[i].player_display_name.includes(matchdata.value.data[chosenmatch].players.all_players[playerindex].name)){
+            for(let j = 0; j < roundnum.player_stats[i].kill_events.length; j++){
+                if(roundnum.player_stats[i].kill_events[j].victim_display_name.includes(matchdata.value.data[chosenmatch].players.all_players[playerindex].name)){
+                    for(let z = 0; z < roundnum.player_stats[i].kill_events[j].player_locations_on_kill.length;z++){
+                        if(roundnum.player_stats[i].kill_events[j].killer_display_name == roundnum.player_stats[i].kill_events[j].player_locations_on_kill[z].player_display_name){
+                            killerlocx = roundnum.player_stats[i].kill_events[j].player_locations_on_kill[z].location.x
+                            killerlocy = roundnum.player_stats[i].kill_events[j].player_locations_on_kill[z].location.y
+                        }
+                    }
+                    deathevents[rndindx] = {
+                        killername: roundnum.player_stats[i].kill_events[j].killer_display_name,
+                        killerx: killerlocx,
+                        killery: killerlocy,
+                        victim_name: roundnum.player_stats[i].kill_events[j].victim_display_name,
+                        victimx: roundnum.player_stats[i].kill_events[j].victim_death_location.x,
+                        victimy: roundnum.player_stats[i].kill_events[j].victim_death_location.y
+                    }
+                    
+                    
+                }
+            }
+            
+        }
+        else{
+            for(let j = 0; j < roundnum.player_stats[i].kill_events.length; j++){
+                for(let z = 0; z < roundnum.player_stats[i].kill_events[j].player_locations_on_kill.length;z++){
+                    if(roundnum.player_stats[i].kill_events[j].player_locations_on_kill[z].player_display_name == roundnum.player_stats[i].kill_events[j].killer_display_name){
+                        killerlocx = roundnum.player_stats[i].kill_events[j].player_locations_on_kill[z].location.x
+                        killerlocy = roundnum.player_stats[i].kill_events[j].player_locations_on_kill[z].location.y
+                    }
+                }
+                elimevents[rndindx][j] = {
+                        killername: roundnum.player_stats[i].kill_events[j].killer_display_name,
+                        killerx: killerlocx,
+                        killery: killerlocy,
+                        victim_name: roundnum.player_stats[i].kill_events[j].victim_display_name,
+                        victimx: roundnum.player_stats[i].kill_events[j].victim_death_location.x,
+                        victimy: roundnum.player_stats[i].kill_events[j].victim_death_location.y
+                    }
+                    
+            }
+        }
+    }
+    
+    
+    
 }
 </script>
 
@@ -198,11 +260,50 @@ export function poppage(){
 import {matchdata, valname, playerindex, winner, chosenmatch} from './Feed.vue'
 import { onMounted, ref } from 'vue';
 import router from '../router';
+import {mapinfo} from '../mapassets/valmap'
 
  
 
 
+ map = matchdata.value.data[chosenmatch].metadata.map.toLowerCase();
+
+
+console.log(map)
+switch(map){
+    case "ascent":
+        mapplayed = mapinfo[0];
+        break;
+    case "split":
+        mapplayed = mapinfo[1];
+        break;
+    case "fracture":
+        mapplayed = mapinfo[2];
+        break;
+    case "bind":
+        mapplayed = mapinfo[3];
+        break;
+    case "breeze":
+        mapplayed = mapinfo[4];
+        break;
+    case "pearl":
+        mapplayed = mapinfo[5];
+        break;
+    case "icebox":
+        mapplayed = mapinfo[6];
+        break;
+    case "haven":
+        mapplayed = mapinfo[7];
+        break;
+}
+console.log(mapplayed.splash)
+
+imageURL = new URL(mapplayed.splash, import.meta.url).href
+minimapURL = new URL(mapplayed.minimap, import.meta.url).href
 poppage()
+
+for(let i= 0; i < matchdata.value.data[chosenmatch].rounds.length; i++){
+    popround(matchdata.value.data[chosenmatch].rounds[i], i);
+}
 
 onMounted( () =>{
     updated.value = true;

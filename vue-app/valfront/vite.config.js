@@ -6,6 +6,9 @@ export default defineConfig({
   
   test: {
     globals: true,
+    coverage: {
+      reporter: ['text', 'json', 'html'],
+    }
   },
   plugins: [vue()],
   
