@@ -92,33 +92,41 @@
             <tab v-for="index in playerinfo[0].rounds" :id="index" :name="index">
             <center>
             <p style="font-family:Valfont; text-decoration: none; font-size: 50px;">Eliminated</p>
-            <table v-if="updated" style="width: 1400px">
+            <table v-if="updated" style="width: 500px">
                     <thead style=" font-family: Valfont;">
                         <tr>
+                            <th>Elim #</th>
                             <th>Eliminated</th>
-                            
-                            
-                            
-                            
-                            
                         </tr>
-
                 </thead>
+                <tbody>
+                    <tr v-if="elimevents[index-1]" v-for="i in elimevents[index-1].length">
+                        <th>{{i}}</th>
+                        <th>{{elimevents[index-1][i-1].victim_name}}</th>
+                    </tr>
+
+                </tbody>
             </table>
 
             <p style="font-family:Valfont; text-decoration: none; font-size: 50px;">Death</p>
-            <table v-if="updated" style="width: 1400px">
-                    <thead style=" font-family: Valfont;">
-                        <tr>
-                            <th>Elimed By</th>
-                            
-                            
-                            
-                            
-                            
-                        </tr>
-
+            <table v-if="updated" style="width: 500px">
+                <thead style=" font-family: Valfont;">
+                    <tr>
+                        <th>Death #</th>
+                        <th>Elimed By</th>
+                    </tr>
                 </thead>
+                <tbody>
+                    <tr v-if="deathevents[index-1]" >
+                        <th>1</th>
+                        <th>{{deathevents[index-1].killername}}</th>
+                    </tr>
+                </tbody>
+                <tbody>
+                <tr v-for="index in playerinfo[0].rounds">
+                </tr>  
+                </tbody>
+
             </table>
             </center>
             <img v-if="updated" :src="minimapURL" />
@@ -139,11 +147,11 @@
  const playerinfo = new Array;
  const elimevents = new Array;
  const deathevents = new Array;
+ const rndmap = new Array;
 
  const updated = ref(false);
  let rounds =  0;
  let map;
- let mapname;
  let redteam;
  let blueteam;
  let agentpic;
@@ -172,7 +180,6 @@
 
 export function poppage(){
      
-    mapname = "../assets/" + map + ".png";
     redteam = matchdata.value.data[chosenmatch].teams.red.rounds_won
     blueteam = matchdata.value.data[chosenmatch].teams.blue.rounds_won
     agentpic = matchdata.value.data[chosenmatch].players.all_players[playerindex].assets.agent.small
@@ -250,10 +257,10 @@ function popround(roundnum, rndindx){
                         }
                     }
                     deathevents[rndindx] = {
-                        killername: roundnum.player_stats[i].kill_events[j].killer_display_name,
+                        killername: roundnum.player_stats[i].kill_events[j].killer_display_name.split('#')[0],
                         killerx: killerlocx,
                         killery: killerlocy,
-                        victim_name: roundnum.player_stats[i].kill_events[j].victim_display_name,
+                        victim_name: roundnum.player_stats[i].kill_events[j].victim_display_name.split('#')[0],
                         victimx: roundnum.player_stats[i].kill_events[j].victim_death_location.x,
                         victimy: roundnum.player_stats[i].kill_events[j].victim_death_location.y
                     }
@@ -272,21 +279,48 @@ function popround(roundnum, rndindx){
                     }
                 }
                 elimevents[rndindx][j] = {
-                        killername: roundnum.player_stats[i].kill_events[j].killer_display_name,
+                        killername: roundnum.player_stats[i].kill_events[j].killer_display_name.split('#')[0],
                         killerx: killerlocx,
                         killery: killerlocy,
-                        victim_name: roundnum.player_stats[i].kill_events[j].victim_display_name,
+                        victim_name: roundnum.player_stats[i].kill_events[j].victim_display_name.split('#')[0],
                         victimx: roundnum.player_stats[i].kill_events[j].victim_death_location.x,
                         victimy: roundnum.player_stats[i].kill_events[j].victim_death_location.y
                     }
+                    console.log(elimevents[rndindx][j].killername)
                     
             }
         }
     }
+      /*
+    if(!deathevents[rndindx]){
+        deathevents[rndindx] = {
+                        killername: "None",
+                        killerx: 0,
+                        killery: 0,
+                        victim_name: "None",
+                        victimx: 0,
+                        victimy: 0
+                    }
+    }
+    
+    if(!elimevents[rndindx][0]){
+        elimevents[rndindx][0] = {
+                        killername: "None",
+                        killerx: 0,
+                        killery: 0,
+                        victim_name: "None",
+                        victimx: 0,
+                        victimy: 0
+                    }
+    }
+*/
+    
+    
+    
+}
 
-    
-    
-    
+function roundpic(){
+
 }
 </script>
 
@@ -338,6 +372,8 @@ poppage()
 for(let i= 0; i < matchdata.value.data[chosenmatch].rounds.length; i++){
     popround(matchdata.value.data[chosenmatch].rounds[i], i);
 }
+
+
 
 onMounted( () =>{
     updated.value = true;
