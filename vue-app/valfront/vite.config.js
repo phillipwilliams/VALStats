@@ -11,6 +11,8 @@ export default defineConfig({
     }
   },
   plugins: [vue()],
-  
+  build: {
+    target: 'es2020'
+  }
   
 })
