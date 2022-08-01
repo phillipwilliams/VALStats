@@ -1,11 +1,11 @@
-<template v-if="updated">
+<template >
     <div id="divtab">
     <tabs>
         <tab :name="valname">
             <div>
                 <center>
                 <p style="font-family:Valfont; text-decoration: none; font-size: 50px;">Match Stats</p>
-                <table v-if="updated" style="width: 1400px">
+                <table style="width: 1400px">
                 <thead style=" font-family:Valfont;">
                 <tr style="font-family:Valfont; text-decoration: none; font-size: 40px;">
                     <th>Map</th>
@@ -14,7 +14,7 @@
                     
 
                 </tr></thead>
-                <tbody v-if="updated">
+                <tbody >
                     <tr style="font-family:Valfont; text-decoration: none; font-size: 50px;">
                         <td v-if="updated"><img  :src="imageURL" height=180 width=325 /><br>{{map}}</td>
                         <td v-if="updated"> <br> {{redteam}} - {{blueteam}} <br> <br> {{winner}}</td>
@@ -26,7 +26,7 @@
                 <br>
                 <p style="font-family:Valfont; text-decoration: none; font-size: 40px;"><b>{{valname}}</b> Stats</p>
                 <div>
-                <table v-if="updated" style="width: 1400px">
+                <table  style="width: 1400px">
                 <thead style=" font-family:Valfont;">
                 <tr style="font-family:Valfont; text-decoration: none; font-size: 25px;">
                     <th>Eliminations</th>
@@ -40,15 +40,15 @@
                     
 
                 </tr></thead>
-                <tbody v-if="updated">
-                    <tr v-if="updated" style="font-family:calibri; text-decoration: none; font-size: 25px;">
+                <tbody >
+                    <tr style="font-family:calibri; text-decoration: none; font-size: 25px;">
                     <td>{{playerelim}}</td>
                     <td>{{playerdeath}}</td>
                     <td>{{playerassist}}</td>
                     <td>{{playerscore}}</td>
                     <td>{{hspercent}}</td>
                     <td>{{bodypercent}}</td>
-                    <td><img v-if="updated" :src="weaponURL" height = 50 width="175"/><br>{{mostused[0]}}: {{mostused[1]}} elims</td>
+                    <td><img :src="weaponURL" height = 50 width="175"/><br>{{mostused[0]}}: {{mostused[1]}} elims</td>
 
                 </tr>    
                 </tbody>
@@ -60,7 +60,7 @@
         <tab name="Scoreboard">
             <div>
                 <center>
-                <table v-if="updated" style="width: 1400px">
+                <table style="width: 1400px">
                     <thead style=" font-family: Valfont;">
                         <tr>
                             <th>Agent</th>
@@ -88,11 +88,11 @@
             </div>
         </tab>
         <tab name="Round Breakdown">
-           <tabs v-if="updated" :options="{ useUrlFragment: false }">
+           <tabs :options="{ useUrlFragment: false }">
             <tab v-for="index in playerinfo[0].rounds" :id="index" :name="index">
             <center>
             <p style="font-family:Valfont; text-decoration: none; font-size: 50px;">Eliminated</p>
-            <table v-if="updated" style="width: 500px">
+            <table style="width: 500px">
                     <thead style=" font-family: Valfont;">
                         <tr>
                             <th>Elim #</th>
@@ -109,7 +109,7 @@
             </table>
 
             <p style="font-family:Valfont; text-decoration: none; font-size: 50px;">Death</p>
-            <table v-if="updated" style="width: 500px">
+            <table style="width: 500px">
                 <thead style=" font-family: Valfont;">
                     <tr>
                         <th>Death #</th>
@@ -122,15 +122,19 @@
                         <th>{{deathevents[index-1].killername}}</th>
                     </tr>
                 </tbody>
-                <tbody>
-                <tr v-for="index in playerinfo[0].rounds">
-                </tr>  
-                </tbody>
+                
 
             </table>
+            
+        
+            <div class="outsideWrapper">
+                <div class="insideWrapper">
+                    <img   class="coveredImage" :src="minimapURL" />
+                    <canvas  :id="'minicanvas-' + index"  width="1024" height="1024" class="coveringCanvas" ></canvas>
+                </div>
+            </div>
             </center>
-            <img v-if="updated" :src="minimapURL" />
-            </tab>
+        </tab>
             
            </tabs>
         </tab>
@@ -373,9 +377,84 @@ for(let i= 0; i < matchdata.value.data[chosenmatch].rounds.length; i++){
     popround(matchdata.value.data[chosenmatch].rounds[i], i);
 }
 
+/*
+xMultiplier
+yMultiplier
+xScalarToAdd
+yScalarToAdd
+x = game_y * valorant-api_map_x_multiplier + valorant-api_map_x_scalar_add;
+y = game_x * valorant-api_map_y_multiplier + valorant-api_map_y_scalar_add;
 
+x *= image.Width;
+y *= image.Height;
+
+
+*/
+function popminimap(){
+    for(let i = 1; i <= playerinfo[0].rounds; i++){
+        let idname = 'minicanvas-' + i;
+        const ctx = document.getElementById(idname).getContext('2d');
+
+
+        for(let j = 0; elimevents[i-1] && j < elimevents[i-1].length; j++){
+            
+            let killx = (elimevents[i-1][j].killery * mapplayed.xMultiplier + mapplayed.xScalarToAdd) * 1024
+            let killy = (elimevents[i-1][j].killerx * mapplayed.yMultiplier + mapplayed.yScalarToAdd) * 1024
+            let vicx = (elimevents[i-1][j].victimy * mapplayed.xMultiplier + mapplayed.xScalarToAdd) * 1024
+            let vicy = (elimevents[i-1][j].victimx * mapplayed.yMultiplier + mapplayed.yScalarToAdd) * 1024
+
+            ctx.beginPath();
+            ctx.arc(killx, killy, 5, 0, 2 * Math.PI, false);
+            ctx.fillStyle = "green"
+            ctx.fill()
+            ctx.beginPath();
+            ctx.arc(vicx, vicy, 5, 0, 2 * Math.PI, false);
+            ctx.fillStyle = "red"
+            ctx.fill()
+
+
+            ctx.beginPath();       // Start a new path
+            ctx.setLineDash([5, 5])
+            ctx.moveTo(killx, killy);    // Move the pen to (30, 50)
+            ctx.lineTo(vicx, vicy);  // Draw a line to (150, 100)
+            ctx.stroke(); 
+        }
+
+        if(deathevents[i-1] != null){
+            
+            let killx = (deathevents[i-1].killery * mapplayed.xMultiplier + mapplayed.xScalarToAdd) * 1024
+            let killy = (deathevents[i-1].killerx * mapplayed.yMultiplier + mapplayed.yScalarToAdd) * 1024
+            let vicx = (deathevents[i-1].victimy * mapplayed.xMultiplier + mapplayed.xScalarToAdd) * 1024
+            let vicy = (deathevents[i-1].victimx * mapplayed.yMultiplier + mapplayed.yScalarToAdd) * 1024
+            
+            ctx.beginPath();
+            ctx.arc(killx, killy, 5, 0, 2 * Math.PI, false);
+            ctx.fillStyle = "green"
+            ctx.fill()
+            ctx.beginPath();
+            ctx.arc(vicx, vicy, 5, 0, 2 * Math.PI, false);
+            ctx.fillStyle = "red"
+            ctx.fill()
+
+
+            ctx.beginPath();
+            ctx.setLineDash([5, 5])       // Start a new path
+            ctx.moveTo(killx, killy);    // Move the pen to (30, 50)
+            ctx.lineTo(vicx, vicy);  // Draw a line to (150, 100)
+            ctx.stroke(); 
+        }
+        
+        
+    }
+}
 
 onMounted( () =>{
+    popminimap();
+    
+    
+
+
+
     updated.value = true;
     
 
@@ -492,6 +571,22 @@ td:first-child{
         box-shadow: 0 0 10px rgba(0, 0, 0, .05);
         padding: 4em 2em;
     }
+}
+
+.outsideWrapper{ 
+    width:1024px; height:1024px; 
+    margin:20px 60px; }
+.insideWrapper{ 
+    width:100%; height:100%; 
+    position:relative;}
+.coveredImage{ 
+    width:100%; height:100%; 
+    position:absolute; top:0px; left:0px;
+}
+.coveringCanvas{ 
+    width:100%; height:100%; 
+    position:absolute; top:0px; left:0px;
+    background-color: rgba(252, 12, 12, 0);
 }
 
 button{
